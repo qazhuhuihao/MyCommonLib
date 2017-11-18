@@ -1,8 +1,6 @@
 # MyCommonLib
 通用工具类
 
-有两种模式：
-
 ## 基本工具
 
 部分参考https://github.com/Leo0618/Utils
