@@ -12,7 +12,9 @@ import cn.hhh.commonlib.utils.Logg;
 /**
  * function : Fragment基类(兼容低版本).
  * <p></p>
- * Created by lzj on 2015/12/31.
+ *
+ * @author lzj
+ * @date 2015/12/31
  */
 @SuppressWarnings({"unused", "deprecation"})
 public class CommonBaseFragment extends Fragment {

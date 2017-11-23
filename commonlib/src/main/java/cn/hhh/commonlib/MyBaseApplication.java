@@ -3,6 +3,8 @@ package cn.hhh.commonlib;
 import android.app.Application;
 import android.os.Looper;
 
+import cn.hhh.commonlib.common.Configs;
+
 /**
  * base应用程序入口
  * Created by hhh on 2017/3/15.
@@ -31,6 +33,7 @@ public class MyBaseApplication extends Application {
         mMainThread = Thread.currentThread();
         mMainThreadId = android.os.Process.myTid();
 
+        Configs.DEBUG = BuildConfig.DEBUG;
     }
 
     /**
