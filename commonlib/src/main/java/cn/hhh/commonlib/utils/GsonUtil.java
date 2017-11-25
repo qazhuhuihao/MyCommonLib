@@ -3,12 +3,12 @@ package cn.hhh.commonlib.utils;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
-import java.util.logging.Logger;
 
 /**
  * Gson
  * Created by hhh on 2016/9/10.
  */
+@SuppressWarnings("unused")
 public class GsonUtil {
 
     public static <T> T jsonToBean(String jsonString, Class<T> cls) {

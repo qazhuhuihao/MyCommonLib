@@ -11,8 +11,8 @@ public interface OnPhotographDisposeListener<T> {
 	/**
 	 * 把路径转换成其它对象
 	 * 
-	 * @param path
-	 * @return
+	 * @param path 路径
+	 * @return T
 	 */
-	public T getPhotographDisposeData(String path);
+    T getPhotographDisposeData(String path);
 }

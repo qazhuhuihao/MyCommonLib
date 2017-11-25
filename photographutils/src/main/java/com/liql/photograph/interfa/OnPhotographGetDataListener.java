@@ -7,5 +7,5 @@ package com.liql.photograph.interfa;
  * 
  */
 public interface OnPhotographGetDataListener<T> {
-	public void getPhotographData(T t);
+	void getPhotographData(T t);
 }

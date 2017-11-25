@@ -1,16 +1,19 @@
 package cn.hhh.commonlib.common;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -22,11 +25,11 @@ import cn.hhh.commonlib.utils.Logg;
  *
  * <p></p>
  * <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+ * <uses-permission name="android.permission.ACCESS_WIFI_STATE"/>
  *
  * Created by lzj on 2015/12/31.
  */
 @SuppressWarnings("ALL")
-@SuppressLint("HardwareIds")
 public final class DeviceInfo {
     private static final String TAG = DeviceInfo.class.getSimpleName();
     /** 屏幕高度 */
@@ -57,9 +60,9 @@ public final class DeviceInfo {
         initDisplayMetrics(context);
         systemLastLocale = Locale.getDefault().toString();
         try {
-            deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+            deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getImei();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logg.e(TAG,"",e);
         }
         initMacAddress(context);
         initDevicesID(context);
@@ -93,10 +96,41 @@ public final class DeviceInfo {
      * 获取mac地址
      */
     private static void initMacAddress(Context context) {
-        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (manager != null && manager.getConnectionInfo() != null) {
             deviceMAC = manager.getConnectionInfo().getMacAddress();
         }
+        if ("02:00:00:00:00:00".equals(deviceMAC) || TextUtils.isEmpty(deviceMAC)) {
+            deviceMAC = getMacAddrInner();
+        }
+    }
+
+    private static String getMacAddrInner() {
+        String defaulMac = "02:00:00:00:00:00";
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!"wlan0".equalsIgnoreCase(nif.getName())) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return defaulMac;
+                }
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(String.format("%02X:", b));
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                defaulMac = res1.toString();
+                return defaulMac;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return defaulMac;
     }
 
     /**
@@ -110,6 +144,9 @@ public final class DeviceInfo {
                     writeInstallationFile(context, installation);
                 }
                 deviceUUID = readInstallationFile(installation);
+                if (!TextUtils.isEmpty(deviceUUID)) {
+                    deviceUUID = deviceUUID.replace("-", "");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -121,7 +158,6 @@ public final class DeviceInfo {
      *
      * @param installation 保存唯一标识符的File对象。
      * @return 唯一标识符。
-     * @throws IOException
      */
     private static String readInstallationFile(File installation) throws IOException {
         RandomAccessFile accessFile = new RandomAccessFile(installation, "r");
@@ -135,7 +171,6 @@ public final class DeviceInfo {
      * 读出保存在程序文件系统中的表示该设备在此程序上的唯一标识符。
      *
      * @param installation 保存唯一标识符的File对象。
-     * @throws IOException
      */
     private static void writeInstallationFile(Context context, File installation) throws IOException {
         FileOutputStream out = new FileOutputStream(installation);

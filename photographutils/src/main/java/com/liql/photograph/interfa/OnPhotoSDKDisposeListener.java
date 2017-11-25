@@ -12,9 +12,9 @@ import android.net.Uri;
 public interface OnPhotoSDKDisposeListener<T> {
 	/**
 	 * 把Uri转换成其它对象
-	 * 
-	 * @param uri
-	 * @return
+	 *
+	 * @param uri uri
+	 * @return T
 	 */
-	public T getPhotoData(Uri uri);
+    T getPhotoData(Uri uri);
 }

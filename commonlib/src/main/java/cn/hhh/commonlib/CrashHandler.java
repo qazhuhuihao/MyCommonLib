@@ -3,7 +3,6 @@ package cn.hhh.commonlib;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Process;
@@ -22,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import cn.hhh.commonlib.utils.FileStorageUtil;
 import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.PackageManagerUtil;
+import cn.hhh.commonlib.utils.UIUtil;
 
 
 /**
@@ -29,14 +29,20 @@ import cn.hhh.commonlib.utils.PackageManagerUtil;
  * <p></p>
  * Created by lzj on 2015/12/31.
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("all")
 public class CrashHandler implements UncaughtExceptionHandler {
-    /** 记录标志. */
+    /**
+     * 记录标志.
+     */
     private static final String TAG = CrashHandler.class.getSimpleName();
-    /** CrashHandler实例. */
+    /**
+     * CrashHandler实例.
+     */
     private static final AtomicReference<CrashHandler> instance = new AtomicReference<>();
 
-    /** 初始化. */
+    /**
+     * 初始化.
+     */
     public static void init(Context context) {
         for (; ; ) {
             CrashHandler netManager = instance.get();
@@ -46,18 +52,28 @@ public class CrashHandler implements UncaughtExceptionHandler {
         }
     }
 
-    /** 程序的Context对象. */
+    /**
+     * 程序的Context对象.
+     */
     private final Context mContext;
-    /** 用于格式化日期,作为日志文件名的一部分. */
+    /**
+     * 用于格式化日期,作为日志文件名的一部分.
+     */
     private final DateFormat formatter = new SimpleDateFormat("MMdd-HH:mm:ss", Locale.getDefault());
 
-    /** 进程名字. 默认主进程名是包名 */
+    /**
+     * 进程名字. 默认主进程名是包名
+     */
     private final String mProcessName;
-    /** 系统默认的UncaughtException处理类. */
+    /**
+     * 系统默认的UncaughtException处理类.
+     */
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final UncaughtExceptionHandler mDefaultHandler;
 
-    /** 保证只有一个CrashHandler实例. */
+    /**
+     * 保证只有一个CrashHandler实例.
+     */
     private CrashHandler(Context context) {
         mContext = context.getApplicationContext();
         // 获取系统默认的UncaughtException处理器
@@ -67,33 +83,28 @@ public class CrashHandler implements UncaughtExceptionHandler {
         mProcessName = PackageManagerUtil.getProcessNameByPid(mContext, Process.myPid());
     }
 
-    /** 当UncaughtException发生时会转入该函数来处理. */
+    /**
+     * 当UncaughtException发生时会转入该函数来处理.
+     */
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
+        UIUtil.getHandler().removeCallbacksAndMessages(null);
         Logg.e(TAG, "---------------uncaughtException start---------------\r\n");
         Logg.e(TAG, "process [" + mProcessName + "],is abnormal!\r\n");
-        Logg.e(TAG,thread.toString());
-        Logg.e(TAG,throwable,throwable);
-        try {
-            handleException(thread, throwable);
-        } catch (Exception ex) {
-            Logg.e(TAG, "uncaughtException,ex:" + ex.getMessage());
-            ex.printStackTrace();
-        }
+        Logg.e(TAG, "", throwable);
         if (PackageManagerUtil.isMainProcess(mContext, mProcessName)) {
-            ComponentName componentName = PackageManagerUtil.getTheProcessBaseActivity(mContext);
-            if (componentName != null) {
-                Intent intent = new Intent();
-                intent.setComponent(componentName);
+            Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(mContext.getPackageName());
+            if (intent != null) {
                 AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
                 PendingIntent restartIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, restartIntent); // 100毫秒钟后重启应用activit
+                if (mgr != null)
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 300, restartIntent); // 300毫秒钟后重启应用activit
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Logg.e(TAG, "error : ", e);
-            }
+        }
+        try {
+            handleException(thread, "", throwable);
+        } catch (Exception ex) {
+            Logg.e(TAG, "uncaughtException,ex:" + ex.getMessage());
         }
         Logg.e(TAG, "---------------uncaughtException end---------------\r\n");
         Process.killProcess(Process.myPid());
@@ -103,11 +114,11 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * 自定义错误处理,收集错误信息 发送错误报告等操作均在此完成.
      */
     @SuppressLint("DefaultLocale")
-    private void handleException(Thread thread, Throwable rhrowable) throws IOException {
+    private void handleException(Thread thread, String msg, Throwable throwable) throws IOException {
         //记录数量达到10个就清理数据
         File logDir = FileStorageUtil.getLogDir();
         if (logDir.exists()) {
-            clearLogexMax(logDir);
+            clearLogExMax(logDir);
         } else {
             logDir.mkdirs();
         }
@@ -121,13 +132,16 @@ public class CrashHandler implements UncaughtExceptionHandler {
         logex.createNewFile();
         // 写入异常到文件中
         FileWriter fw = new FileWriter(logex, true);
+        fw.write("\r\n" + android.os.Build.BRAND + "," + android.os.Build.MODEL + "," + android.os.Build.VERSION.RELEASE); // 厂商,设备,以及版本信息
+        fw.write("\r\nVersionCode: " + PackageManagerUtil.getVersion(mContext).first); //版本号
+        fw.write("\r\nmsg：" + msg); // 记录的额外信息
         fw.write("\r\nProcess[" + mProcessName + "," + Process.myPid() + "]"); // 进程信息，线程信息
         fw.write("\r\n" + thread + "(" + thread.getId() + ")"); // 进程信息，线程信息
         fw.write("\r\nTime stamp：" + date); // 日期
         // 打印调用栈
         PrintWriter printWriter = new PrintWriter(fw);
-        rhrowable.printStackTrace(printWriter);
-        Throwable cause = rhrowable.getCause();
+        throwable.printStackTrace(printWriter);
+        Throwable cause = throwable.getCause();
         while (cause != null) {
             cause.printStackTrace(printWriter);
             cause = cause.getCause();
@@ -141,25 +155,39 @@ public class CrashHandler implements UncaughtExceptionHandler {
     /**
      * 清理日志,限制日志数量.
      *
-     * @param logdir 日志目录
+     * @param logDir 日志目录
      */
-    private void clearLogexMax(File logdir) {
-        File[] logList = logdir.listFiles();
+    private void clearLogExMax(File logDir) {
+        File[] logList = logDir.listFiles();
         if (logList == null || logList.length == 0) {
             return;
         }
         int length = logList.length;
-        if (length >= 10) {
+        //保存20条
+        if (length >= 20) {
             for (File aLogList : logList) {
                 try {
                     if (aLogList.delete()) {
-                        Logg.d(TAG, "clearLogexMax delete:" + aLogList.getName());
+                        Logg.d(TAG, "clearLogExMax delete:" + aLogList.getName());
                     }
                 } catch (Exception ex) {
-                    Logg.e(TAG, "clearLogexMax,ex:" + ex);
+                    Logg.e(TAG, "clearLogExMax,ex:" + ex);
                 }
             }
         }
     }
 
+    /**
+     * 外部调用
+     *
+     * @param msg       记录的额外信息
+     * @param throwable Throwable
+     */
+    public static void addCrash(String msg, Throwable throwable) {
+        try {
+            instance.get().handleException(Thread.currentThread(), msg, throwable);
+        } catch (IOException e) {
+            Logg.e(TAG, "uncaughtException,e:" + e.getMessage());
+        }
+    }
 }

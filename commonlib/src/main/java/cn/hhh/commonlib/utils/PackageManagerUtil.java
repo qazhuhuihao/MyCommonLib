@@ -2,16 +2,13 @@ package cn.hhh.commonlib.utils;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
-import android.app.ActivityManager.RunningServiceInfo;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.support.v4.util.Pair;
 import android.text.TextUtils;
 
 import org.json.JSONObject;
@@ -19,7 +16,6 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * function : 应用相关配置信息获取工具类 管理的对应文件：AndroidManifest.xml 管理设备信息.
@@ -29,6 +25,7 @@ import java.util.logging.Logger;
 @SuppressWarnings("unused")
 public class PackageManagerUtil {
     private static final String TAG = PackageManagerUtil.class.getSimpleName();
+
 //    private static final String DEAD_DATE = "2016-11-11";
 //
 //    static {
@@ -97,43 +94,25 @@ public class PackageManagerUtil {
     }
 
     /**
-     * 获取AndroidManifest中指定版本号整形值
+     * 获取AndroidManifest中指定版本号信息
      *
-     * @return 如果没有获取成功(没有对应值, 或者异常)，则返回值为-1
+     * @return <版本号,版本名称> 如果没有获取成功(没有对应值, 或者异常)，则返回值为<-1,">
      */
-    public static int getPackageVersionCode(Context context) {
+    public static Pair<Integer,String> getVersion(Context context) {
         int verCode = -1;
-        PackageManager pm = context.getPackageManager();
-        PackageInfo pi;
-        try {
-            pi = pm.getPackageInfo(context.getPackageName(), 0);
-            if (null != pi.versionName) {
-                verCode = pi.versionCode;
-            }
-        } catch (NameNotFoundException e) {
-            Logg.e(TAG, "", e);
-        }
-        return verCode;
-    }
-
-    /**
-     * 获取AndroidManifest中指定的版本号名字符串
-     *
-     * @return 如果没有获取成功(没有对应值, 或者异常)，则返回值为""
-     */
-    public static String getPackageVersionName(Context context) {
         String verName = "";
         PackageManager pm = context.getPackageManager();
         PackageInfo pi;
         try {
             pi = pm.getPackageInfo(context.getPackageName(), 0);
             if (null != pi.versionName) {
+                verCode = pi.versionCode;
                 verName = pi.versionName;
             }
         } catch (NameNotFoundException e) {
             Logg.e(TAG, "", e);
         }
-        return verName;
+        return new Pair<>(verCode, verName);
     }
 
     /**
@@ -178,25 +157,25 @@ public class PackageManagerUtil {
         return false;
     }
 
-    /**
-     * 退出应用
-     *
-     * @param context 上下文
-     */
-    public static void exitApp(final Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (context.getPackageName().equals(service.service.getPackageName())) {
-                Intent stopIntent = new Intent();
-                ComponentName serviceCMP = service.service;
-                stopIntent.setComponent(serviceCMP);
-                context.stopService(stopIntent);
-                break;
-            }
-        }
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
-    }
+//    /**
+//     * 退出应用
+//     *
+//     * @param context 上下文
+//     */
+//    public static void exitApp(final Context context) {
+//        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+//            if (context.getPackageName().equals(service.service.getPackageName())) {
+//                Intent stopIntent = new Intent();
+//                ComponentName serviceCMP = service.service;
+//                stopIntent.setComponent(serviceCMP);
+//                context.stopService(stopIntent);
+//                break;
+//            }
+//        }
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        System.exit(0);
+//    }
 
     /**
      * 判断apk是否被安装
@@ -343,22 +322,22 @@ public class PackageManagerUtil {
         return false;
     }
 
-    /**
-     * 获取当前堆栈中的低一个activity
-     *
-     * @param context 上下文
-     * @return 当前堆栈中的低一个activity
-     */
-    @SuppressWarnings("deprecation")
-    public static ComponentName getTheProcessBaseActivity(final Context context) {
-        ActivityManager activityManager = (ActivityManager) context.getApplicationContext().getSystemService(
-                Context.ACTIVITY_SERVICE);
-        RunningTaskInfo task = activityManager.getRunningTasks(1).get(0);
-        if (task.numActivities > 0) {
-            Logg.d(TAG, "runningActivity topActivity=" + task.topActivity.getClassName());
-            Logg.d(TAG, "runningActivity baseActivity=" + task.baseActivity.getClassName());
-            return task.baseActivity;
-        }
-        return null;
-    }
+//    /**
+//     * 获取当前堆栈中的低一个activity
+//     *
+//     * @param context 上下文
+//     * @return 当前堆栈中的低一个activity
+//     */
+//    @SuppressWarnings("deprecation")
+//    public static ComponentName getTheProcessBaseActivity(final Context context) {
+//        ActivityManager activityManager = (ActivityManager) context.getApplicationContext().getSystemService(
+//                Context.ACTIVITY_SERVICE);
+//        RunningTaskInfo task = activityManager.getRunningTasks(1).get(0);
+//        if (task.numActivities > 0) {
+//            Logg.d(TAG, "runningActivity topActivity=" + task.topActivity.getClassName());
+//            Logg.d(TAG, "runningActivity baseActivity=" + task.baseActivity.getClassName());
+//            return task.baseActivity;
+//        }
+//        return null;
+//    }
 }

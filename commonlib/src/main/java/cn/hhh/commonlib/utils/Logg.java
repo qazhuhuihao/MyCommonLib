@@ -7,13 +7,13 @@ import cn.hhh.commonlib.common.Configs;
  * <p></p>
  * Created by lzj on 2015/12/31.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 public final class Logg {
     private static boolean DEBUG = Configs.DEBUG;
 
-    public static void v(String tag, String content) {
+    public static void v(String tag, String msg) {
         if (!DEBUG) return;
-        android.util.Log.v(tag, content);
+        android.util.Log.v(tag, msg);
     }
 
     public static void v(final String tag, Object... objs) {
@@ -21,9 +21,9 @@ public final class Logg {
         android.util.Log.v(tag, getInfo(objs));
     }
 
-    public static void w(String tag, String content) {
+    public static void w(String tag, String msg) {
         if (!DEBUG) return;
-        android.util.Log.w(tag, content);
+        android.util.Log.w(tag, msg);
     }
 
     public static void w(final String tag, Object... objs) {
@@ -31,9 +31,9 @@ public final class Logg {
         android.util.Log.w(tag, getInfo(objs));
     }
 
-    public static void i(String tag, String content) {
+    public static void i(String tag, String msg) {
         if (!DEBUG) return;
-        android.util.Log.i(tag, content);
+        android.util.Log.i(tag, msg);
     }
 
     public static void i(final String tag, Object... objs) {
@@ -41,9 +41,9 @@ public final class Logg {
         android.util.Log.i(tag, getInfo(objs));
     }
 
-    public static void d(String tag, String content) {
+    public static void d(String tag, String msg) {
         if (!DEBUG) return;
-        android.util.Log.d(tag, content);
+        android.util.Log.d(tag, msg);
     }
 
     public static void d(final String tag, Object... objs) {
@@ -51,14 +51,14 @@ public final class Logg {
         android.util.Log.d(tag, getInfo(objs));
     }
 
-    public static void e(String tag, String content) {
+    public static void e(String tag, String msg) {
         if (!DEBUG) return;
-        android.util.Log.e(tag, content);
+        android.util.Log.e(tag, msg);
     }
 
-    public static void e(String tag, String content, Throwable e) {
+    public static void e(String tag, String msg, Throwable e) {
         if (!DEBUG) return;
-        android.util.Log.e(tag, content, e);
+        android.util.Log.e(tag, msg, e);
     }
 
     public static void e(final String tag, Object... objs) {
