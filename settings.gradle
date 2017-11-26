@@ -1,1 +1,1 @@
-include ':sample', ':commonlib', ':photographutils'
+include ':sample', ':commonlib'

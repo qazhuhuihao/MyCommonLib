@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 
+import cn.hhh.commonlib.CrashHandler;
+
 /**
  * Gson
  * Created by hhh on 2016/9/10.
@@ -21,7 +23,7 @@ public class GsonUtil {
 
         } catch (Exception e) {
             Logg.e("解析发生异常：" + e.getMessage());
-            e.printStackTrace();
+            CrashHandler.addCrash(jsonString,e);
         }
         return t;
     }
@@ -35,8 +37,8 @@ public class GsonUtil {
             t = gson.fromJson(jsonString, typeOfT);
 
         } catch (Throwable e) {
-            e.printStackTrace();
             Logg.e("解析发生异常：" + e.getMessage());
+            CrashHandler.addCrash(jsonString,e);
         }
         return t;
     }

@@ -50,5 +50,7 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     //获取照片
-    compile project(':photographutils')
+    compile('com.github.liqinew:photoframe:v.1.0.3') {
+        exclude module: 'support-v7'
+    }
 }
