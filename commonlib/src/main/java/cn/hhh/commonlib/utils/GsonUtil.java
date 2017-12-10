@@ -8,7 +8,9 @@ import cn.hhh.commonlib.CrashHandler;
 
 /**
  * Gson
- * Created by hhh on 2016/9/10.
+ *
+ * @author hhh
+ * @date 2016/9/10
  */
 @SuppressWarnings("unused")
 public class GsonUtil {
@@ -17,7 +19,6 @@ public class GsonUtil {
         T t = null;
         try {
             Logg.sysOut("jsonString: " + jsonString);
-            Logg.d("NoHttp: " + jsonString);
             Gson gson = new Gson();
             t = gson.fromJson(jsonString, cls);
 
@@ -32,7 +33,6 @@ public class GsonUtil {
         T t = null;
         try {
             Logg.sysOut("jsonString: " + jsonString);
-            Logg.d("NoHttp: " + jsonString);
             Gson gson = new Gson();
             t = gson.fromJson(jsonString, typeOfT);
 

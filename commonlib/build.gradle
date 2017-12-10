@@ -37,20 +37,21 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.yanzhenjie:permission:1.0.8'
     compile 'com.google.code.gson:gson:2.8.2'
-    //glide
-    compile 'com.github.bumptech.glide:glide:4.3.1'
-    compile 'jp.wasabeef:glide-transformations:3.0.1'
-    //rx
-    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    //retrofit2
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+//    compile 'com.yanzhenjie:permission:1.0.8'
 
-    //获取照片
-    compile('com.github.liqinew:photoframe:v.1.0.3') {
-        exclude module: 'support-v7'
-    }
+//    //glide
+//    compile 'com.github.bumptech.glide:glide:4.3.1'
+//    compile 'jp.wasabeef:glide-transformations:3.0.1'
+//    //rx
+//    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
+//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+//    //retrofit2
+//    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+//    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+//    //获取照片
+//    compile('com.github.liqinew:photoframe:v.1.0.3') {
+//        exclude module: 'support-v7'
+//    }
 }
