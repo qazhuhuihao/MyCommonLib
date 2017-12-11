@@ -3,7 +3,6 @@ package cn.hhh.commonlib.utils;
 import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -693,7 +692,7 @@ public class FileStorageUtil {
             }
             outputStream.flush();
         } catch (IOException e) {
-            Log.e(TAG, "writeInputStram fail, cause ：" + e.getMessage());
+            Logg.e(TAG, "writeInputStram fail, cause ：" + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
@@ -704,7 +703,7 @@ public class FileStorageUtil {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, "IOException ：" + e.getMessage());
+                Logg.e(TAG, "IOException ：" + e.getMessage());
             }
         }
         return mFile;

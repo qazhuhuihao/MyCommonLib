@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/sw_width"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="@dimen/sw_title_width"
+            android:layout_height="@dimen/sw_title_height"
+            android:background="@color/colorPrimary"
+            android:gravity="center|left"
+            android:paddingLeft="@dimen/sw_title_padding"
+            android:paddingRight="@dimen/sw_title_padding"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sw_title_size"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_zoom"
+            android:layout_width="@dimen/sw_zoom_width"
+            android:layout_height="@dimen/sw_title_height"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sw_title_size"
+            tools:text="+" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/hsv_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/corners_bottom_gray"
+        android:scrollbars="none">
+
+        <ScrollView
+            android:id="@+id/sv_log"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/sw_log_height"
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/tv_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:textColor="#000000" />
+
+        </ScrollView>
+    </HorizontalScrollView>
+</LinearLayout>
