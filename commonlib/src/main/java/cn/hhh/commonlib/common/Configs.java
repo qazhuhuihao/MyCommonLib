@@ -30,7 +30,7 @@ public final class Configs {
 //    }
 
     /** 日志记录目录 */
-    public static final String PATH_BASE_LOG = "/.crashLog/";
+    public static final String PATH_BASE_LOG = "/crashLog/";
     /** 临时文件目录 */
     public static final String PATH_BASE_TEMP = "/temp/";
     /** 公共图片文件目录 */
