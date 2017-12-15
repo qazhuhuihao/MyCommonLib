@@ -107,14 +107,20 @@ public class LogSuspensionWindow {
             addLogBuffer(this.logBuffer, myLogBean);
 
         if (null != rootView) {
-            tvLog.setText(this.logBuffer.toString());
-            if (tvLog.getMeasuredHeight() <= svLog.getScrollY() + svLog.getHeight())
-                UIUtil.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        svLog.fullScroll(ScrollView.FOCUS_DOWN);
-                    }
-                });
+            UIUtil.post(new Runnable() {
+                @Override
+                public void run() {
+                    tvLog.setText(logBuffer.toString());
+                    if (tvLog.getMeasuredHeight() <= svLog.getScrollY() + svLog.getHeight())
+                        UIUtil.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                svLog.fullScroll(ScrollView.FOCUS_DOWN);
+                            }
+                        });
+                }
+            });
+
         }
     }
 
