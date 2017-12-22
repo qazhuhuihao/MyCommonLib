@@ -48,17 +48,22 @@ public class LogSuspensionWindow {
 
     private int mStartX;
     private int mStartY;
+    private int mDeviationX;
+    private int mDeviationY;
     private int mEndX;
     private int mEndY;
+    private int mWindowX;
+    private int mWindowY;
+
+    private final int mMinMove = 30;
 
     private boolean mShow;
     private final int maxNumber = 150;
 
     private final int removeNumber = 60;
 
-    private List<MyLogBean> myList =  new ArrayList<>(maxNumber + removeNumber);
+    private List<MyLogBean> myList = new ArrayList<>(maxNumber + removeNumber);
     private StringBuffer logBuffer = new StringBuffer();
-
 
 
     private LogSuspensionWindow() {
@@ -81,6 +86,7 @@ public class LogSuspensionWindow {
         init();
     }
 
+    @SuppressWarnings("all")
     public void onDestroy() {
         if (null != rootView) {
             //移除悬浮窗口
@@ -167,6 +173,8 @@ public class LogSuspensionWindow {
         if (mShow) {
             hsvLog.setVisibility(View.VISIBLE);
             tvZoom.setText("-");
+//            GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_topleft_primary);
+//            titleDrawable.setColor(UIUtil.getColor(R.color.black));
             tvTitle.setBackground(UIUtil.getDrawable(R.drawable.corners_topleft_primary));
             tvZoom.setBackground(UIUtil.getDrawable(R.drawable.corners_topright_primarydark));
         } else {
@@ -191,14 +199,20 @@ public class LogSuspensionWindow {
                     case MotionEvent.ACTION_DOWN:
                         mStartX = (int) event.getRawX();
                         mStartY = (int) event.getRawY();
+                        mDeviationX = mStartX - mWindowX;
+                        mDeviationY = mStartY - mWindowY;
+                        System.out.println(mDeviationX);
+                        System.out.println(mDeviationY);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         mEndX = (int) event.getRawX();
                         mEndY = (int) event.getRawY();
                         if (needIntercept()) {
                             //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                            wmParams.x = (int) event.getRawX() - rootView.getMeasuredWidth() / 2;
-                            wmParams.y = (int) event.getRawY() - rootView.getMeasuredHeight() / 2;
+                            mWindowX = (int) event.getRawX() - mDeviationX;
+                            mWindowY = (int) event.getRawY() - mDeviationY;
+                            wmParams.x = mWindowX;
+                            wmParams.y = mWindowY;
                             mWindowManager.updateViewLayout(rootView, wmParams);
                             return true;
                         }
@@ -226,10 +240,7 @@ public class LogSuspensionWindow {
      * @return true:拦截;false:不拦截.
      */
     private boolean needIntercept() {
-        if (Math.abs(mStartX - mEndX) > 30 || Math.abs(mStartY - mEndY) > 30) {
-            return true;
-        }
-        return false;
+        return Math.abs(mStartX - mEndX) > mMinMove || Math.abs(mStartY - mEndY) > mMinMove;
     }
 
     /**
@@ -256,7 +267,7 @@ public class LogSuspensionWindow {
     }
 
     private void addLogBuffer(StringBuffer logBuffer, MyLogBean logBean) {
-        logBuffer.append(DateTimeUtil.formatDate(logBean.date,DateTimeUtil.DF_HH_MM_SS)).append(" ").append(logBean.logTag).append(" ").append(logBean.logMsg).append("\n");
+        logBuffer.append(DateTimeUtil.formatDate(logBean.date, DateTimeUtil.DF_HH_MM_SS)).append(" ").append(logBean.logTag).append(" ").append(logBean.logMsg).append("\n");
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -267,7 +278,9 @@ public class LogSuspensionWindow {
                 try {
                     if (isAppAtBackground(UIUtil.getContext())) {
                         ActivityManager am = (ActivityManager) UIUtil.getContext().getSystemService(Context.ACTIVITY_SERVICE);
-                        am.moveTaskToFront(AppManager.getAppManager().getTopActivity().getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
+                        if (am != null) {
+                            am.moveTaskToFront(AppManager.getAppManager().getTopActivity().getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
+                        }
                     }
                 } catch (Exception e) {
                     Logg.e(TAG, "", e);

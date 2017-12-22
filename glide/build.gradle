@@ -23,6 +23,6 @@ android {
 dependencies {
     implementation project(':commonlib')
     //glide
-    compile 'com.github.bumptech.glide:glide:4.3.1'
+    compile 'com.github.bumptech.glide:glide:4.4.0'
     compile 'jp.wasabeef:glide-transformations:3.0.1'
 }

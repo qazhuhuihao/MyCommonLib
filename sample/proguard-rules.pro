@@ -19,3 +19,52 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class cn.hhh.**{*;} #个人通用类不参与混淆
+
+-dontwarn javax.annotation.**
+-dontwarn javax.inject.**
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+
+#okio
+-dontwarn okio.**
+-keep class okio.**{*;}
+
+#retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.**{*;}
+# RxJava RxAndroid
+-dontwarn sun.misc.**
+-keep class sun.misc.**{*;}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+
+# Gson
+-keep class com.google.gson.stream.** { *; }
+-keepattributes EnclosingMethod
+
+#Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+#未混淆的类和成员
+-printseeds seeds.txt
+#列出从 apk 中删除的代码
+-printusage unused.txt
+#混淆前后的映射
+-printmapping mapping.txt
