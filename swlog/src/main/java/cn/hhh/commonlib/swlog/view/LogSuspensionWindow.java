@@ -2,7 +2,6 @@ package cn.hhh.commonlib.swlog.view;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -55,6 +54,7 @@ public class LogSuspensionWindow {
     private int mWindowX;
     private int mWindowY;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final int mMinMove = 30;
 
     private boolean mShow;
@@ -201,8 +201,6 @@ public class LogSuspensionWindow {
                         mStartY = (int) event.getRawY();
                         mDeviationX = mStartX - mWindowX;
                         mDeviationY = mStartY - mWindowY;
-                        System.out.println(mDeviationX);
-                        System.out.println(mDeviationY);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         mEndX = (int) event.getRawX();
@@ -247,16 +245,43 @@ public class LogSuspensionWindow {
      * 判断当前应用程序处于前台还是后台
      */
     @SuppressWarnings("all")
-    private boolean isAppAtBackground(final Context context) {
+//    private boolean isAppAtBackground(final Context context) {
+//        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+//        if (!tasks.isEmpty()) {
+//            ComponentName topActivity = tasks.get(0).topActivity;
+//            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+    private boolean isAppInBackground(Context context) {
+        boolean isInBackground = true;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
-        if (!tasks.isEmpty()) {
-            ComponentName topActivity = tasks.get(0).topActivity;
-            if (!topActivity.getPackageName().equals(context.getPackageName())) {
-                return true;
+        //if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                System.out.println("processName:" + processInfo.processName);
+                //前台程序
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : processInfo.pkgList) {
+                        System.out.println("activeProcess:" + activeProcess);
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
             }
-        }
-        return false;
+//        } else {
+//            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+//            ComponentName componentInfo = taskInfo.get(0).topActivity;
+//            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+//                isInBackground = false;
+//            }
+//        }
+
+        return isInBackground;
     }
 
     private void repaintLog() {
@@ -275,8 +300,9 @@ public class LogSuspensionWindow {
         public void onClick(View v) {
             int i = v.getId();
             if (i == R.id.tv_title) {
+                Logg.i(TAG,"tv_title -> onClick");
                 try {
-                    if (isAppAtBackground(UIUtil.getContext())) {
+                    if (isAppInBackground(UIUtil.getContext())) {
                         ActivityManager am = (ActivityManager) UIUtil.getContext().getSystemService(Context.ACTIVITY_SERVICE);
                         if (am != null) {
                             am.moveTaskToFront(AppManager.getAppManager().getTopActivity().getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);

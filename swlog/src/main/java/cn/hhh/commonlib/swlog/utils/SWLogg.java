@@ -58,6 +58,13 @@ public class SWLogg extends Logg.LoggExample {
     }
 
     @Override
+    public void e(String tag, String msg, Throwable e) {
+        super.e(tag, msg, e);
+        if (printToSW)
+            LogSuspensionWindow.getInstance().addLog(new MyLogBean(Log.ERROR, tag, e));
+    }
+
+    @Override
     public void sysOut(Object msg) {
         super.sysOut(msg);
         if (printToSW)
