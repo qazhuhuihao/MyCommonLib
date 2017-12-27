@@ -165,6 +165,10 @@ public class LogSuspensionWindow {
         tvLog = rootView.findViewById(R.id.tv_log);
         hsvLog = rootView.findViewById(R.id.hsv_log);
         svLog = rootView.findViewById(R.id.sv_log);
+
+//        GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_bottom_gray);
+//        titleDrawable.setColor(UIUtil.getColor(R.color.black));
+//        svLog.setBackground(UIUtil.getDrawable(R.drawable.corners_bottom_gray));
         setZoom(true);
     }
 
@@ -300,7 +304,7 @@ public class LogSuspensionWindow {
         public void onClick(View v) {
             int i = v.getId();
             if (i == R.id.tv_title) {
-                Logg.i(TAG,"tv_title -> onClick");
+                Logg.i(TAG, "tv_title -> onClick");
                 try {
                     if (isAppInBackground(UIUtil.getContext())) {
                         ActivityManager am = (ActivityManager) UIUtil.getContext().getSystemService(Context.ACTIVITY_SERVICE);

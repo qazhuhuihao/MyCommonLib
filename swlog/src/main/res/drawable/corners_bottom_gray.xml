@@ -3,5 +3,4 @@
     <corners
         android:bottomLeftRadius="@dimen/suspension_window_corners"
         android:bottomRightRadius="@dimen/suspension_window_corners" />
-    <solid android:color="@color/swLogBackground" />
 </shape>

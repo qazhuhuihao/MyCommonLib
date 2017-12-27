@@ -98,7 +98,7 @@ public class PackageManagerUtil {
      *
      * @return <版本号,版本名称> 如果没有获取成功(没有对应值, 或者异常)，则返回值为<-1,">
      */
-    public static Pair<Integer,String> getVersion(Context context) {
+    public static Pair<Integer, String> getVersion(Context context) {
         int verCode = -1;
         String verName = "";
         PackageManager pm = context.getPackageManager();
@@ -144,6 +144,7 @@ public class PackageManagerUtil {
         ActivityManager activityManager = (ActivityManager) context.getApplicationContext().getSystemService(
                 Context.ACTIVITY_SERVICE);
         String packageName = context.getApplicationContext().getPackageName();
+        assert activityManager != null;
         List<RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         if (appProcesses != null) {
             for (RunningAppProcessInfo appProcess : appProcesses) {
@@ -194,26 +195,6 @@ public class PackageManagerUtil {
             Logg.e(TAG, TAG + "--->Exception:" + e.getMessage());
         }
         return result;
-    }
-
-    /**
-     * 获取已安装apk版本号
-     *
-     * @return 指定已安装的包名apk的版本号
-     */
-    public static int getVersionCode(Context context, String packageName) {
-        int versionCode = -1;
-        if (packageName == null || "".equals(packageName)) {
-            return versionCode;
-        }
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, 0);
-            versionCode = info.versionCode;
-        } catch (NameNotFoundException e) {
-            Logg.e(TAG, TAG + "--->Exception:" + e.getMessage());
-        }
-        return versionCode;
-
     }
 
     /**
@@ -283,6 +264,7 @@ public class PackageManagerUtil {
     public static String getProcessNameByPid(Context context, final int pid) {
         String processName = null;
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        assert activityManager != null;
         List<RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         if (appProcesses != null) {
             for (RunningAppProcessInfo appProcess : appProcesses) {
@@ -306,6 +288,7 @@ public class PackageManagerUtil {
         ActivityManager activityManager = (ActivityManager) context.getApplicationContext().getSystemService(
                 Context.ACTIVITY_SERVICE);
         int myPid = android.os.Process.myPid();
+        assert activityManager != null;
         List<RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         if (appProcesses != null) {
             for (RunningAppProcessInfo appProcess : appProcesses) {

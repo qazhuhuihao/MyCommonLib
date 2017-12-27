@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/sw_width"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical">
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,8 +38,9 @@
 
     <HorizontalScrollView
         android:id="@+id/hsv_log"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/sw_width"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sw_title_height"
         android:background="@drawable/corners_bottom_gray"
         android:scrollbars="none">
 
@@ -53,8 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"
-                android:textColor="#000000" />
+                android:textColor="@color/black" />
 
         </ScrollView>
     </HorizontalScrollView>
-</LinearLayout>
+</android.support.v7.widget.CardView>
