@@ -1,9 +1,10 @@
 <resources>
 
     <dimen name="suspension_window_corners">6dp</dimen><!-- 悬浮窗圆角 -->
+    <dimen name="suspension_window_elevation">2dp</dimen><!-- 悬浮窗高度 -->
     <dimen name="sw_width">280dp</dimen>
-    <dimen name="sw_title_size">20sp</dimen>
-    <dimen name="sw_title_padding">4dp</dimen>
+    <dimen name="sw_title_size">18sp</dimen>
+    <dimen name="sw_title_padding">6dp</dimen>
     <dimen name="sw_title_width">220dp</dimen>
     <dimen name="sw_title_height">40dp</dimen>
     <dimen name="sw_zoom_width">60dp</dimen>

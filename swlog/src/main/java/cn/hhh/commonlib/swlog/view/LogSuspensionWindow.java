@@ -1,10 +1,14 @@
 package cn.hhh.commonlib.swlog.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +27,7 @@ import cn.hhh.commonlib.swlog.bean.MyLogBean;
 import cn.hhh.commonlib.swlog.utils.SWLogg;
 import cn.hhh.commonlib.utils.DateTimeUtil;
 import cn.hhh.commonlib.utils.Logg;
+import cn.hhh.commonlib.utils.PackageManagerUtil;
 import cn.hhh.commonlib.utils.UIUtil;
 
 import static android.content.Context.WINDOW_SERVICE;
@@ -41,9 +46,20 @@ public class LogSuspensionWindow {
     private WindowManager.LayoutParams wmParams;
     private WindowManager mWindowManager;
     private View rootView;
+    private CardView cvRoot;
     private TextView tvTitle, tvZoom, tvLog;
     private HorizontalScrollView hsvLog;
     private ScrollView svLog;
+
+    private int rotateAnimationDuration = 2000;
+    //    private Animation circularAnimation;
+    //private AnimatorSet animatorSet;
+    private ValueAnimator animator;
+
+    private int cRadius;
+    private int cTitleHeight;
+    private int cTitleWidth;
+    private int cZoomWidth;
 
     private int mStartX;
     private int mStartY;
@@ -57,7 +73,7 @@ public class LogSuspensionWindow {
     @SuppressWarnings("FieldCanBeLocal")
     private final int mMinMove = 30;
 
-    private boolean mShow;
+    private int zoomLevel;
     private final int maxNumber = 150;
 
     private final int removeNumber = 60;
@@ -135,6 +151,8 @@ public class LogSuspensionWindow {
         initView();
         addWindowView2Window();
         initClick();
+        getConfigure();
+        //initAnimation();
     }
 
     @SuppressLint("RtlHardcoded")
@@ -160,25 +178,21 @@ public class LogSuspensionWindow {
     @SuppressLint("InflateParams")
     private void initView() {
         rootView = LayoutInflater.from(UIUtil.getContext()).inflate(R.layout.layout_suspension_window, null);
+        cvRoot = rootView.findViewById(R.id.cv_root);
         tvTitle = rootView.findViewById(R.id.tv_title);
         tvZoom = rootView.findViewById(R.id.tv_zoom);
         tvLog = rootView.findViewById(R.id.tv_log);
         hsvLog = rootView.findViewById(R.id.hsv_log);
         svLog = rootView.findViewById(R.id.sv_log);
-
-//        GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_bottom_gray);
-//        titleDrawable.setColor(UIUtil.getColor(R.color.black));
-//        svLog.setBackground(UIUtil.getDrawable(R.drawable.corners_bottom_gray));
-        setZoom(true);
+        setZoom(1);
     }
 
-    private void setZoom(boolean isShow) {
-        mShow = isShow;
-        if (mShow) {
+    private void setZoom(int zoomLevel) {
+        this.zoomLevel = zoomLevel;
+        Logg.i(TAG, "zoomLevel:" + zoomLevel);
+        if (0 < zoomLevel) {
             hsvLog.setVisibility(View.VISIBLE);
             tvZoom.setText("-");
-//            GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_topleft_primary);
-//            titleDrawable.setColor(UIUtil.getColor(R.color.black));
             tvTitle.setBackground(UIUtil.getDrawable(R.drawable.corners_topleft_primary));
             tvZoom.setBackground(UIUtil.getDrawable(R.drawable.corners_topright_primarydark));
         } else {
@@ -195,44 +209,102 @@ public class LogSuspensionWindow {
 
     @SuppressWarnings("all")
     private void initClick() {
-        tvTitle.setOnTouchListener(new View.OnTouchListener() {
+//        tvTitle.setOnTouchListener(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        mStartX = (int) event.getRawX();
+//                        mStartY = (int) event.getRawY();
+//                        mDeviationX = mStartX - mWindowX;
+//                        mDeviationY = mStartY - mWindowY;
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        mEndX = (int) event.getRawX();
+//                        mEndY = (int) event.getRawY();
+//                        if (needIntercept()) {
+//                            //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+//                            mWindowX = (int) event.getRawX() - mDeviationX;
+//                            mWindowY = (int) event.getRawY() - mDeviationY;
+//                            wmParams.x = mWindowX;
+//                            wmParams.y = mWindowY;
+//                            mWindowManager.updateViewLayout(rootView, wmParams);
+//                            return true;
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (needIntercept()) {
+//                            return true;
+//                        }
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+        tvTitle.setOnTouchListener(onTouchListener);
+        //tvZoom.setOnTouchListener(onTouchListener);
+        tvTitle.setOnClickListener(onClickListener);
+        tvZoom.setOnClickListener(onClickListener);
 
+    }
+
+    private void getConfigure() {
+        cRadius = UIUtil.getDimens(R.dimen.cardview_default_radius);
+        cTitleHeight = UIUtil.getDimens(R.dimen.sw_title_height);
+        cTitleWidth = UIUtil.getDimens(R.dimen.sw_title_width);
+        cZoomWidth = UIUtil.getDimens(R.dimen.sw_zoom_width);
+    }
+
+    private void initAnimation() {
+//        circularAnimation = new CircularAnimation();
+        //animatorSet = new AnimatorSet();
+        animator = ValueAnimator.ofFloat(0, 1);
+        animator.setDuration(rotateAnimationDuration);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mStartX = (int) event.getRawX();
-                        mStartY = (int) event.getRawY();
-                        mDeviationX = mStartX - mWindowX;
-                        mDeviationY = mStartY - mWindowY;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        mEndX = (int) event.getRawX();
-                        mEndY = (int) event.getRawY();
-                        if (needIntercept()) {
-                            //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                            mWindowX = (int) event.getRawX() - mDeviationX;
-                            mWindowY = (int) event.getRawY() - mDeviationY;
-                            wmParams.x = mWindowX;
-                            wmParams.y = mWindowY;
-                            mWindowManager.updateViewLayout(rootView, wmParams);
-                            return true;
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (needIntercept()) {
-                            return true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                return false;
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float progress = (float) animation.getAnimatedValue();
+
+                if (zoomLevel != 0)
+                    progress = 1 - progress;
+
+                System.out.println(progress);
+                //float radius = ((float) cTitleHeight) / 2 - cRadius * progress;
+                float radius = cRadius + (cTitleHeight / 2 - cRadius) * progress;
+                System.out.println(radius);
+//                GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_left_primary);
+//                GradientDrawable zoomDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_right_primarydark);
+//                float[] radiiLeft = new float[]{radius, radius, 0, 0, 0, 0, radius, radius};
+//                float[] radiiRight = new float[]{radius, radius, radius, radius, radius, radius, radius, radius};
+//                titleDrawable.setCornerRadii(radiiLeft);
+//                zoomDrawable.setCornerRadii(radiiRight);
+
+                int width = (int) (cZoomWidth - (cZoomWidth - cTitleHeight) * progress);
+                tvZoom.setWidth(width);
+                tvZoom.postInvalidate();
+                tvTitle.setWidth((int) ((1 - progress) * cTitleWidth));
+                tvTitle.postInvalidate();
+
+                cvRoot.setRadius(radius);
             }
         });
 
-        tvTitle.setOnClickListener(onClickListener);
-        tvZoom.setOnClickListener(onClickListener);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                Logg.i(TAG, "onAnimationStart()");
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Logg.i(TAG, "onAnimationEnd()");
+            }
+        });
 
     }
 
@@ -243,49 +315,6 @@ public class LogSuspensionWindow {
      */
     private boolean needIntercept() {
         return Math.abs(mStartX - mEndX) > mMinMove || Math.abs(mStartY - mEndY) > mMinMove;
-    }
-
-    /**
-     * 判断当前应用程序处于前台还是后台
-     */
-    @SuppressWarnings("all")
-//    private boolean isAppAtBackground(final Context context) {
-//        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
-//        if (!tasks.isEmpty()) {
-//            ComponentName topActivity = tasks.get(0).topActivity;
-//            if (!topActivity.getPackageName().equals(context.getPackageName())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-    private boolean isAppInBackground(Context context) {
-        boolean isInBackground = true;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        //if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
-            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
-                System.out.println("processName:" + processInfo.processName);
-                //前台程序
-                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    for (String activeProcess : processInfo.pkgList) {
-                        System.out.println("activeProcess:" + activeProcess);
-                        if (activeProcess.equals(context.getPackageName())) {
-                            isInBackground = false;
-                        }
-                    }
-                }
-            }
-//        } else {
-//            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-//            ComponentName componentInfo = taskInfo.get(0).topActivity;
-//            if (componentInfo.getPackageName().equals(context.getPackageName())) {
-//                isInBackground = false;
-//            }
-//        }
-
-        return isInBackground;
     }
 
     private void repaintLog() {
@@ -306,7 +335,7 @@ public class LogSuspensionWindow {
             if (i == R.id.tv_title) {
                 Logg.i(TAG, "tv_title -> onClick");
                 try {
-                    if (isAppInBackground(UIUtil.getContext())) {
+                    if (PackageManagerUtil.isAppOnForeground(UIUtil.getContext())) {
                         ActivityManager am = (ActivityManager) UIUtil.getContext().getSystemService(Context.ACTIVITY_SERVICE);
                         if (am != null) {
                             am.moveTaskToFront(AppManager.getAppManager().getTopActivity().getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
@@ -317,10 +346,58 @@ public class LogSuspensionWindow {
                 }
 
             } else if (i == R.id.tv_zoom) {
-                System.out.println("show:" + (!mShow));
-                setZoom(!mShow);
-
+                Logg.i(TAG, "tv_zoom -> onClick");
+                setZoom(1 - zoomLevel);
+//                if (2 > zoomLevel) {
+//                    System.out.println("startCircularAnimation()");
+//                    startCircularAnimation();
+//                }
             }
         }
     };
+
+    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+//            if (v.getId() == tvZoom.getId() && zoomLevel > 0)
+//                return false;
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mStartX = (int) event.getRawX();
+                    mStartY = (int) event.getRawY();
+                    mDeviationX = mStartX - mWindowX;
+                    mDeviationY = mStartY - mWindowY;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    mEndX = (int) event.getRawX();
+                    mEndY = (int) event.getRawY();
+                    if (needIntercept()) {
+                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        mWindowX = (int) event.getRawX() - mDeviationX;
+                        mWindowY = (int) event.getRawY() - mDeviationY;
+                        wmParams.x = mWindowX;
+                        wmParams.y = mWindowY;
+                        mWindowManager.updateViewLayout(rootView, wmParams);
+                        return true;
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (needIntercept()) {
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    };
+
+    private void startCircularAnimation() {
+        animator.cancel();
+        animator.start();
+    }
+
 }

@@ -149,9 +149,13 @@ public class PackageManagerUtil {
         if (appProcesses != null) {
             for (RunningAppProcessInfo appProcess : appProcesses) {
                 // The name of the process that this object is associated with.
-                if (appProcess.processName.equals(packageName)
-                        && appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    return true;
+                //前台程序
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : appProcess.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
