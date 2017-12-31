@@ -2,19 +2,26 @@ package cn.hhh.commonlib.swlog.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -47,14 +54,20 @@ public class LogSuspensionWindow {
     private WindowManager mWindowManager;
     private View rootView;
     private CardView cvRoot;
+    private LinearLayout llTitle;
     private TextView tvTitle, tvZoom, tvLog;
     private HorizontalScrollView hsvLog;
     private ScrollView svLog;
 
-    private int rotateAnimationDuration = 2000;
+    @SuppressWarnings("FieldCanBeLocal")
+    private int zoomDuration = 1200;
+    private int zeDuration = 300;
     //    private Animation circularAnimation;
     //private AnimatorSet animatorSet;
-    private ValueAnimator animator;
+    private ValueAnimator zoomAnimator, ceAnimator;
+    private TimeInterpolator mInterpolator;
+
+    private int windowWidth;
 
     private int cRadius;
     private int cTitleHeight;
@@ -152,7 +165,8 @@ public class LogSuspensionWindow {
         addWindowView2Window();
         initClick();
         getConfigure();
-        //initAnimation();
+        initAnimation();
+
     }
 
     @SuppressLint("RtlHardcoded")
@@ -179,6 +193,7 @@ public class LogSuspensionWindow {
     private void initView() {
         rootView = LayoutInflater.from(UIUtil.getContext()).inflate(R.layout.layout_suspension_window, null);
         cvRoot = rootView.findViewById(R.id.cv_root);
+        llTitle = rootView.findViewById(R.id.ll_title);
         tvTitle = rootView.findViewById(R.id.tv_title);
         tvZoom = rootView.findViewById(R.id.tv_zoom);
         tvLog = rootView.findViewById(R.id.tv_log);
@@ -189,7 +204,7 @@ public class LogSuspensionWindow {
 
     private void setZoom(int zoomLevel) {
         this.zoomLevel = zoomLevel;
-        Logg.i(TAG, "zoomLevel:" + zoomLevel);
+        //Logg.i(TAG, "zoomLevel:" + zoomLevel);
         if (0 < zoomLevel) {
             hsvLog.setVisibility(View.VISIBLE);
             tvZoom.setText("-");
@@ -205,47 +220,14 @@ public class LogSuspensionWindow {
 
     private void addWindowView2Window() {
         mWindowManager.addView(rootView, wmParams);
+        mWindowX = 0;
+        mWindowY = 0;
     }
 
     @SuppressWarnings("all")
     private void initClick() {
-//        tvTitle.setOnTouchListener(new View.OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        mStartX = (int) event.getRawX();
-//                        mStartY = (int) event.getRawY();
-//                        mDeviationX = mStartX - mWindowX;
-//                        mDeviationY = mStartY - mWindowY;
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        mEndX = (int) event.getRawX();
-//                        mEndY = (int) event.getRawY();
-//                        if (needIntercept()) {
-//                            //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-//                            mWindowX = (int) event.getRawX() - mDeviationX;
-//                            mWindowY = (int) event.getRawY() - mDeviationY;
-//                            wmParams.x = mWindowX;
-//                            wmParams.y = mWindowY;
-//                            mWindowManager.updateViewLayout(rootView, wmParams);
-//                            return true;
-//                        }
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        if (needIntercept()) {
-//                            return true;
-//                        }
-//                        break;
-//                    default:
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
         tvTitle.setOnTouchListener(onTouchListener);
-        //tvZoom.setOnTouchListener(onTouchListener);
+        tvZoom.setOnTouchListener(onTouchListener);
         tvTitle.setOnClickListener(onClickListener);
         tvZoom.setOnClickListener(onClickListener);
 
@@ -256,14 +238,16 @@ public class LogSuspensionWindow {
         cTitleHeight = UIUtil.getDimens(R.dimen.sw_title_height);
         cTitleWidth = UIUtil.getDimens(R.dimen.sw_title_width);
         cZoomWidth = UIUtil.getDimens(R.dimen.sw_zoom_width);
+
+        Point point = new Point();
+        mWindowManager.getDefaultDisplay().getSize(point);
+        windowWidth = point.x;
     }
 
     private void initAnimation() {
-//        circularAnimation = new CircularAnimation();
-        //animatorSet = new AnimatorSet();
-        animator = ValueAnimator.ofFloat(0, 1);
-        animator.setDuration(rotateAnimationDuration);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        zoomAnimator = ValueAnimator.ofFloat(0, 1);
+        zoomAnimator.setDuration(zoomDuration);
+        zoomAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float progress = (float) animation.getAnimatedValue();
@@ -271,41 +255,74 @@ public class LogSuspensionWindow {
                 if (zoomLevel != 0)
                     progress = 1 - progress;
 
-                System.out.println(progress);
-                //float radius = ((float) cTitleHeight) / 2 - cRadius * progress;
-                float radius = cRadius + (cTitleHeight / 2 - cRadius) * progress;
-                System.out.println(radius);
-//                GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_left_primary);
-//                GradientDrawable zoomDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_right_primarydark);
-//                float[] radiiLeft = new float[]{radius, radius, 0, 0, 0, 0, radius, radius};
-//                float[] radiiRight = new float[]{radius, radius, radius, radius, radius, radius, radius, radius};
-//                titleDrawable.setCornerRadii(radiiLeft);
-//                zoomDrawable.setCornerRadii(radiiRight);
+                final int radius = UIUtil.dip2px(cRadius + (UIUtil.px2dip(cTitleHeight) / 2 - cRadius) * progress);
+                GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_left_primary);
+                GradientDrawable zoomDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_right_primarydark);
+                float[] radiiLeft = new float[]{radius, radius, 0, 0, 0, 0, radius, radius};
+                float[] radiiRight = new float[]{0, 0, radius, radius, radius, radius, 0, 0};
+                titleDrawable.setCornerRadii(radiiLeft);
+                zoomDrawable.setCornerRadii(radiiRight);
 
-                int width = (int) (cZoomWidth - (cZoomWidth - cTitleHeight) * progress);
-                tvZoom.setWidth(width);
-                tvZoom.postInvalidate();
-                tvTitle.setWidth((int) ((1 - progress) * cTitleWidth));
-                tvTitle.postInvalidate();
+                tvZoom.getLayoutParams().width = (int) (cZoomWidth - (cZoomWidth - cTitleHeight) * progress);
+
+                tvTitle.getLayoutParams().width = (int) ((1 - progress) * cTitleWidth);
 
                 cvRoot.setRadius(radius);
+                tvTitle.requestLayout();
+                tvZoom.requestLayout();
+                
             }
         });
 
-        animator.addListener(new AnimatorListenerAdapter() {
+        zoomAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
-                Logg.i(TAG, "onAnimationStart()");
+                llTitle.getLayoutParams().width = cZoomWidth + cTitleWidth;
+                llTitle.requestLayout();
+                //Logg.i(TAG, "onAnimationStart()");
             }
 
             @Override
+            @SuppressWarnings("all")
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                Logg.i(TAG, "onAnimationEnd()");
+                if (1 == zoomLevel) {
+                    setZoom(zoomLevel);
+                } else if (0 == zoomLevel) {
+                    llTitle.getLayoutParams().width = cTitleHeight;
+                    llTitle.requestLayout();
+
+                    int startX = wmParams.x;
+                    int endX = (startX * 2 + cZoomWidth > windowWidth) ? windowWidth : 0;
+                    ceAnimator = ObjectAnimator.ofInt(startX, endX);
+                    ceAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            wmParams.x = (int) animation.getAnimatedValue();
+                            mWindowManager.updateViewLayout(rootView, wmParams);
+                        }
+                    });
+                    if (null == mInterpolator)
+                        mInterpolator = new DecelerateInterpolator();
+
+                    ceAnimator.setInterpolator(mInterpolator);
+                    ceAnimator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            ceAnimator.removeAllUpdateListeners();
+                            ceAnimator.removeAllListeners();
+                            ceAnimator = null;
+                        }
+                    });
+                    ceAnimator.setDuration(zeDuration).start();
+
+                }
+                //Logg.i(TAG, "onAnimationEnd()");
             }
         });
-
+        cvRoot.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        cvRoot.setPersistentDrawingCache(ViewGroup.PERSISTENT_NO_CACHE);
     }
 
     /**
@@ -333,7 +350,7 @@ public class LogSuspensionWindow {
         public void onClick(View v) {
             int i = v.getId();
             if (i == R.id.tv_title) {
-                Logg.i(TAG, "tv_title -> onClick");
+                //Logg.i(TAG, "tv_title -> onClick");
                 try {
                     if (PackageManagerUtil.isAppOnForeground(UIUtil.getContext())) {
                         ActivityManager am = (ActivityManager) UIUtil.getContext().getSystemService(Context.ACTIVITY_SERVICE);
@@ -346,12 +363,15 @@ public class LogSuspensionWindow {
                 }
 
             } else if (i == R.id.tv_zoom) {
-                Logg.i(TAG, "tv_zoom -> onClick");
-                setZoom(1 - zoomLevel);
-//                if (2 > zoomLevel) {
-//                    System.out.println("startCircularAnimation()");
-//                    startCircularAnimation();
-//                }
+                //Logg.i(TAG, "tv_zoom -> onClick");
+                if (0 == zoomLevel) {
+                    zoomLevel = 1 - zoomLevel;
+                } else {
+                    setZoom(1 - zoomLevel);
+                }
+                if (2 > zoomLevel) {
+                    startZoomAnimation();
+                }
             }
         }
     };
@@ -360,8 +380,8 @@ public class LogSuspensionWindow {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-//            if (v.getId() == tvZoom.getId() && zoomLevel > 0)
-//                return false;
+            if (v.getId() == tvZoom.getId() && zoomLevel > 0)
+                return false;
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -384,6 +404,8 @@ public class LogSuspensionWindow {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    mEndX = (int) event.getRawX();
+                    mEndY = (int) event.getRawY();
                     if (needIntercept()) {
                         return true;
                     }
@@ -395,9 +417,9 @@ public class LogSuspensionWindow {
         }
     };
 
-    private void startCircularAnimation() {
-        animator.cancel();
-        animator.start();
+    private void startZoomAnimation() {
+        zoomAnimator.cancel();
+        zoomAnimator.start();
     }
 
 }
