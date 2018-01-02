@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyCommonLib</string>
+    <string name="make_crash">make crash</string>
 </resources>

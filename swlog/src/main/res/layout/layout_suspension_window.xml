@@ -15,13 +15,14 @@
         android:id="@+id/ll_title"
         android:layout_width="@dimen/sw_width"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="@dimen/sw_title_width"
             android:layout_height="@dimen/sw_title_height"
-            android:background="@color/colorPrimary"
+            android:background="@color/titleBackground"
             android:ellipsize="end"
             android:gravity="center|start"
             android:paddingLeft="@dimen/sw_title_padding"
@@ -35,7 +36,7 @@
             android:id="@+id/tv_zoom"
             android:layout_width="@dimen/sw_zoom_width"
             android:layout_height="@dimen/sw_title_height"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/zoomBackground"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sw_title_size"

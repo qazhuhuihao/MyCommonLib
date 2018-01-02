@@ -3,5 +3,5 @@
     <corners
         android:bottomRightRadius="@dimen/suspension_window_corners"
         android:topRightRadius="@dimen/suspension_window_corners" />
-    <solid android:color="@color/colorPrimaryDark" />
+    <solid android:color="@color/zoomBackground" />
 </shape>

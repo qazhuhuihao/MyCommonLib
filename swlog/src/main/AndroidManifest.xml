@@ -3,4 +3,11 @@
 
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application >
+        <!--debug-->
+        <activity
+            android:name=".activity.CrashActivity"
+            android:label="错误日志"/>
+    </application>
 </manifest>
