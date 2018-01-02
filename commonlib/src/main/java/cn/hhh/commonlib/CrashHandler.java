@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import cn.hhh.commonlib.utils.DateTimeUtil;
 import cn.hhh.commonlib.utils.FileStorageUtil;
 import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.PackageManagerUtil;
@@ -59,7 +60,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     /**
      * 用于格式化日期,作为日志文件名的一部分.
      */
-    private final DateFormat formatter = new SimpleDateFormat("MMdd-HH:mm:ss", Locale.getDefault());
+    private final DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
 
     /**
      * 进程名字. 默认主进程名是包名
@@ -92,6 +93,12 @@ public class CrashHandler implements UncaughtExceptionHandler {
         Logg.e(TAG, "---------------uncaughtException start---------------\r\n");
         Logg.e(TAG, "process [" + mProcessName + "],is abnormal!\r\n");
         Logg.e(TAG, "", throwable);
+        try {
+            handleException(thread, "", throwable);
+        } catch (Exception ex) {
+            Logg.e(TAG, "uncaughtException,ex:", ex);
+        }
+        Logg.e(TAG, "---------------uncaughtException end---------------\r\n");
         if (PackageManagerUtil.isMainProcess(mContext, mProcessName)) {
             Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(mContext.getPackageName());
             if (intent != null) {
@@ -101,12 +108,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 300, restartIntent); // 300毫秒钟后重启应用activit
             }
         }
-        try {
-            handleException(thread, "", throwable);
-        } catch (Exception ex) {
-            Logg.e(TAG, "uncaughtException,ex:" + ex.getMessage());
-        }
-        Logg.e(TAG, "---------------uncaughtException end---------------\r\n");
         Process.killProcess(Process.myPid());
     }
 
@@ -127,7 +128,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
         // 本次记录文件名
         Date date = new Date(); // 当前时间
-        String logFileName = formatter.format(date) + String.format("[%s-%d]", thread.getName(), thread.getId()) + ".txt";
+        String logFileName = "Crash_" + formatter.format(date) + "_" + (throwable.getClass().getSimpleName()) + ".txt";
+        Logg.e(TAG, logFileName);
         File logex = new File(logDir, logFileName);
         logex.createNewFile();
         // 写入异常到文件中
@@ -137,7 +139,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
         fw.write("\r\nmsg：" + msg); // 记录的额外信息
         fw.write("\r\nProcess[" + mProcessName + "," + Process.myPid() + "]"); // 进程信息，线程信息
         fw.write("\r\n" + thread + "(" + thread.getId() + ")"); // 进程信息，线程信息
-        fw.write("\r\nTime stamp：" + date); // 日期
+        fw.write("\r\nTime stamp：" + DateTimeUtil.formatDate(date, DateTimeUtil.DF_YYYY_MM_DD_HH_MM_SS)); // 日期
+        fw.write("\r\n");
         // 打印调用栈
         PrintWriter printWriter = new PrintWriter(fw);
         throwable.printStackTrace(printWriter);

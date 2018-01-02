@@ -148,7 +148,7 @@ public class FileStorageUtil {
     /**
      * 获取日志记录目录文件
      *
-     * @return File("/mnt/storage0/packagename/.crashLog") if the phone has SD card,else return File("data/data/packagename/cache/.crashLog")
+     * @return File("/mnt/storage0/packagename/crashLog") if the phone has SD card,else return File("data/data/packagename/cache/crashLog")
      */
     public static File getLogDir() {
         File dir = new File(getAppRootDir(), Configs.PATH_BASE_LOG);
@@ -422,8 +422,9 @@ public class FileStorageUtil {
      */
     public static void deleteFolderFile(File rootFile, boolean deleteThisPath, boolean deleteDirectory) {
         try {
-            if (rootFile.isDirectory()) {// 处理目录
-                File files[] = rootFile.listFiles();
+            // 处理目录
+            if (rootFile.isDirectory()) {
+                File[] files = rootFile.listFiles();
                 for (File file : files) {
                     deleteFolderFile(file, deleteDirectory, deleteDirectory);
                 }
@@ -598,6 +599,7 @@ public class FileStorageUtil {
      * @param content  保存的内容
      * @param encoding 写文件编码
      */
+    @SuppressWarnings("all")
     public static void writeStringToFile(String filePath, String content, String encoding) {
         BufferedWriter writer = null;
         File file = new File(filePath);
@@ -685,10 +687,10 @@ public class FileStorageUtil {
             mFile.getParentFile().mkdirs();
         try {
             outputStream = new FileOutputStream(mFile);
-            byte buffer[] = new byte[4 * 1024];
-            int lenght;
-            while ((lenght = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, lenght);
+            byte[] buffer = new byte[4 * 1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
             }
             outputStream.flush();
         } catch (IOException e) {
