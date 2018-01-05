@@ -85,6 +85,7 @@ public class LogSuspensionWindow {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int mMinMove = 30;
+    private boolean isMoving = false;
 
     private int zoomLevel;
     private final int maxNumber = 150;
@@ -110,8 +111,8 @@ public class LogSuspensionWindow {
             SWLogg.printToSW = true;
             Logg.setLogg(new SWLogg());
         }
-        Logg.i(TAG, "onCreate");
         onDestroy();
+        Logg.i(TAG, "onCreate");
         init();
     }
 
@@ -293,18 +294,24 @@ public class LogSuspensionWindow {
                 super.onAnimationStart(animation);
                 llTitle.getLayoutParams().width = cZoomWidth + cTitleWidth;
                 llTitle.requestLayout();
-                //Logg.i(TAG, "onAnimationStart()");
+                if (1 == zoomLevel) {
+                    int radius = UIUtil.dip2px(UIUtil.px2dip(cTitleHeight) / 2);
+                    float[] radiiRight = new float[]{0, 0, radius, radius, radius, radius, 0, 0};
+                    GradientDrawable zoomDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_right_primarydark);
+                    zoomDrawable.setCornerRadii(radiiRight);
+                    tvZoom.setBackgroundResource(R.drawable.corners_right_primarydark);
+                }
             }
 
             @Override
-            @SuppressWarnings("all")
+
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 if (1 == zoomLevel) {
                     setZoom(zoomLevel);
                 } else if (0 == zoomLevel) {
 
-                    int radius = UIUtil.dip2px(cRadius + (UIUtil.px2dip(cTitleHeight) / 2 - cRadius) * 1);
+                    int radius = UIUtil.dip2px(UIUtil.px2dip(cTitleHeight) / 2);
 
                     float[] radiiRight = new float[]{radius, radius, radius, radius, radius, radius, radius, radius};
                     GradientDrawable zoomDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_right_primarydark);
@@ -415,6 +422,7 @@ public class LogSuspensionWindow {
                     mEndX = (int) event.getRawX();
                     mEndY = (int) event.getRawY();
                     if (needIntercept()) {
+                        isMoving = true;
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         mWindowX = (int) event.getRawX() - mDeviationX;
                         mWindowY = (int) event.getRawY() - mDeviationY;
@@ -436,6 +444,7 @@ public class LogSuspensionWindow {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    isMoving = false;
                     mEndX = (int) event.getRawX();
                     mEndY = (int) event.getRawY();
                     if (needIntercept()) {
@@ -452,6 +461,8 @@ public class LogSuspensionWindow {
     private View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
+            if (isMoving)
+                return false;
             int i = v.getId();
             if (i == R.id.tv_title) {
                 if (!CrashActivity.isCreate) {

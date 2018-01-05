@@ -147,7 +147,7 @@ public final class DeviceInfo {
                 if (!TextUtils.isEmpty(deviceUUID)) {
                     deviceUUID = deviceUUID.replace("-", "");
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

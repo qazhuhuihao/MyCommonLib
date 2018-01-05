@@ -1,6 +1,7 @@
 package cn.hhh.mycommonlib;
 
 import cn.hhh.commonlib.MyBaseApplication;
+import cn.hhh.commonlib.common.Configs;
 
 /**
  * @author qazhu
@@ -13,6 +14,8 @@ public class MyApplication extends MyBaseApplication {
     public void onCreate() {
         super.onCreate();
 
+        //栗子默认使用debug模式
+        Configs.DEBUG = true;
     }
 
 }
