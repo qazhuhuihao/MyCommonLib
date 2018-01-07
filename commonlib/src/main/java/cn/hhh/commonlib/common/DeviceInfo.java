@@ -1,7 +1,9 @@
 package cn.hhh.commonlib.common;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -29,7 +31,8 @@ import cn.hhh.commonlib.utils.Logg;
  *
  * Created by lzj on 2015/12/31.
  */
-@SuppressWarnings("ALL")
+@SuppressLint({"HardwareIds"})
+@SuppressWarnings("WeakerAccess")
 public final class DeviceInfo {
     private static final String TAG = DeviceInfo.class.getSimpleName();
     /** 屏幕高度 */
@@ -56,13 +59,18 @@ public final class DeviceInfo {
     /**
      * 初始化本地配置
      */
+    @SuppressWarnings("all")
     public static void init(Context context) {
         initDisplayMetrics(context);
         systemLastLocale = Locale.getDefault().toString();
         try {
-            deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getImei();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getImei();
+            } else {
+                deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+            }
         } catch (Exception e) {
-            Logg.e(TAG,"",e);
+            Logg.e(TAG, "", e);
         }
         initMacAddress(context);
         initDevicesID(context);

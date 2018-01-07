@@ -2,20 +2,24 @@ package cn.hhh.mycommonlib;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
 import java.util.List;
+import java.util.Random;
 
 import cn.hhh.commonlib.CrashHandler;
 import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.common.DeviceInfo;
 import cn.hhh.commonlib.manager.AppManager;
+import cn.hhh.commonlib.rx.RxBus;
 import cn.hhh.commonlib.swlog.bean.MyLogBean;
 import cn.hhh.commonlib.swlog.view.LogSuspensionWindow;
 import cn.hhh.commonlib.utils.FileStorageUtil;
@@ -30,18 +34,24 @@ public class MainActivity extends CommonBaseActivity {
 
     private final int REQUEST_CODE_SETTING = 300;
 
+    private TextView tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findView(R.id.tv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int[] a = null;
-                System.out.println(a[0]);
-            }
-        });
+        tv = findView(R.id.tv);
+
+// .setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int[] a = null;
+//                System.out.println(a[0]);
+//            }
+//        });
+
+        tv.setOnClickListener(onClickListener);
 
         checkPermissions();
 
@@ -94,6 +104,16 @@ public class MainActivity extends CommonBaseActivity {
                         }
                     })
                     .show();
+        }
+    };
+
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int i = new Random().nextInt();
+            RxBus.getDefault().post(i);
+            startActivity(new Intent(MainActivity.this,BActivity.class));
         }
     };
 }
