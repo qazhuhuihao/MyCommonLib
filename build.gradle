@@ -9,17 +9,30 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-
+        classpath 'com.novoda:bintray-release:0.8.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
+//    tasks.withType(Javadoc) {
+//        source = android.sourceSets.main.java.srcDirs
+//        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//        options.encoding = "UTF-8"
+//    }
     repositories {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+    }
+    tasks.withType(Javadoc).all {
+        enabled = false
+        options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
     }
 }
 
