@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 27
@@ -7,7 +8,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
 
     }
 
@@ -21,6 +22,15 @@ android {
 }
 
 dependencies {
-    implementation project(':commonlib')
+    compile 'com.qazhuhuihao:commonlib:0.0.1'
     implementation 'com.android.support:cardview-v7:27.0.2'
 }
+
+//publish {
+//    userOrg = 'qazhuhuihao'//bintray.com用户名
+//    groupId = 'com.qazhuhuihao'//jcenter上的路径
+//    artifactId = 'commonlib-swlog'//项目名称
+//    publishVersion = '0.0.1'//版本号
+//    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
+//    website = 'https://github.com/qazhuhuihao/MyCommonLib'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+//}

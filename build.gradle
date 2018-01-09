@@ -16,11 +16,6 @@ buildscript {
 }
 
 allprojects {
-//    tasks.withType(Javadoc) {
-//        source = android.sourceSets.main.java.srcDirs
-//        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//        options.encoding = "UTF-8"
-//    }
     repositories {
         google()
         jcenter()

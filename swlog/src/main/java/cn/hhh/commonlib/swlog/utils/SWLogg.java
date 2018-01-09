@@ -15,13 +15,6 @@ public class SWLogg extends Logg.LoggExample {
 
     public static boolean printToSW = false;
 
-    //private static final String PRINT_TO_SW = "printToSW";
-
-//    public static void setPrintToSW(boolean isOpen){
-//        SPManager.saveBoolean(PRINT_TO_SW,isOpen);
-//        if ()
-//    }
-
     @Override
     public void v(String tag, String msg) {
         super.v(tag, msg);
