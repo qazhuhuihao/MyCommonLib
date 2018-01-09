@@ -14,7 +14,7 @@ import java.io.ObjectOutputStream;
 import cn.hhh.commonlib.utils.UIUtil;
 
 /**
- * @author liujian
+ * @author hhh
  */
 @SuppressWarnings("unused")
 public class SPManager {
@@ -23,9 +23,14 @@ public class SPManager {
 
     private static SharedPreferences sp;
 
-    private static void check() {
-        if (null == sp)
-            sp = UIUtil.getContext().getSharedPreferences(SP_SELF_NAME, Context.MODE_PRIVATE);
+    private static void createSP() {
+        sp = UIUtil.getContext().getSharedPreferences(SP_SELF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static SharedPreferences getSP() {
+        if (sp == null)
+            createSP();
+        return sp;
     }
 
     /**
@@ -35,7 +40,8 @@ public class SPManager {
      * @param value value
      */
     public static void saveBoolean(String key, boolean value) {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().putBoolean(key, value).apply();
     }
 
@@ -46,13 +52,15 @@ public class SPManager {
      * @param value value
      */
     public static void saveString(String key, String value) {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().putString(key, value).apply();
 
     }
 
     public static void clear() {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().clear().apply();
     }
 
@@ -63,7 +71,8 @@ public class SPManager {
      * @param value value
      */
     public static void saveLong(String key, long value) {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().putLong(key, value).apply();
     }
 
@@ -74,7 +83,8 @@ public class SPManager {
      * @param value value
      */
     public static void saveInt(String key, int value) {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().putInt(key, value).apply();
     }
 
@@ -87,7 +97,8 @@ public class SPManager {
      * @param value value
      */
     public static void saveFloat(String key, float value) {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().putFloat(key, value).apply();
     }
 
@@ -99,7 +110,8 @@ public class SPManager {
      * @return String
      */
     public static String getString(String key, String defValue) {
-        check();
+        if (sp == null)
+            createSP();
         return sp.getString(key, defValue);
     }
 
@@ -111,7 +123,8 @@ public class SPManager {
      * @return int
      */
     public static int getInt(String key, int defValue) {
-        check();
+        if (sp == null)
+            createSP();
         return sp.getInt(key, defValue);
     }
 
@@ -121,7 +134,8 @@ public class SPManager {
      * @param key key
      */
     public static void remove(String key) {
-        check();
+        if (sp == null)
+            createSP();
         sp.edit().remove(key).apply();
     }
 
@@ -132,7 +146,8 @@ public class SPManager {
      * @param defValue defValue
      */
     public static long getLong(String key, long defValue) {
-        check();
+        if (sp == null)
+            createSP();
         return sp.getLong(key, defValue);
     }
 
@@ -143,7 +158,8 @@ public class SPManager {
      * @param defValue defValue
      */
     public static float getFloat(String key, float defValue) {
-        check();
+        if (sp == null)
+            createSP();
         return sp.getFloat(key, defValue);
     }
 
@@ -154,7 +170,8 @@ public class SPManager {
      * @param defValue defValue
      */
     public static boolean getBoolean(String key, boolean defValue) {
-        check();
+        if (sp == null)
+            createSP();
         return sp.getBoolean(key, defValue);
     }
 
@@ -165,7 +182,8 @@ public class SPManager {
      * @param object object
      */
     public static void saveObj(String key, Object object) {
-        check();
+        if (sp == null)
+            createSP();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos;
@@ -189,7 +207,8 @@ public class SPManager {
      * @return T
      */
     public static <T> T getObj(String key, Class<T> cls) {
-        check();
+        if (sp == null)
+            createSP();
         String objBase64 = sp.getString(key, null);
         if (TextUtils.isEmpty(objBase64))
             return null;
