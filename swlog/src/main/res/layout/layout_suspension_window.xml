@@ -42,30 +42,6 @@
             android:textSize="@dimen/sw_title_size"
             tools:text="+" />
     </LinearLayout>
-    <!--<TextView-->
-    <!--android:id="@+id/tv_title"-->
-    <!--android:layout_width="@dimen/sw_title_width"-->
-    <!--android:layout_height="@dimen/sw_title_height"-->
-    <!--android:background="@color/colorPrimary"-->
-    <!--android:ellipsize="end"-->
-    <!--android:gravity="center|start"-->
-    <!--android:paddingLeft="@dimen/sw_title_padding"-->
-    <!--android:paddingRight="@dimen/sw_title_padding"-->
-    <!--android:singleLine="true"-->
-    <!--android:text="@string/app_name"-->
-    <!--android:textColor="@android:color/white"-->
-    <!--android:textSize="@dimen/sw_title_size" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_zoom"-->
-    <!--android:layout_width="@dimen/sw_zoom_width"-->
-    <!--android:layout_height="@dimen/sw_title_height"-->
-    <!--android:layout_marginLeft="220.5dp"-->
-    <!--android:background="@color/colorPrimaryDark"-->
-    <!--android:gravity="center"-->
-    <!--android:textColor="@android:color/white"-->
-    <!--android:textSize="@dimen/sw_title_size"-->
-    <!--tools:text="+" />-->
 
     <HorizontalScrollView
         android:id="@+id/hsv_log"
@@ -90,4 +66,12 @@
 
         </ScrollView>
     </HorizontalScrollView>
+
+    <ImageView
+        android:id="@+id/iv_zoom"
+        android:layout_width="@dimen/iv_zoom_size"
+        android:layout_height="@dimen/iv_zoom_size"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_texture_black_48dp"
+        tools:ignore="ContentDescription" />
 </android.support.v7.widget.CardView>

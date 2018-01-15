@@ -9,4 +9,6 @@
     <dimen name="sw_title_height">40dp</dimen>
     <dimen name="sw_zoom_width">60dp</dimen>
     <dimen name="sw_log_height">240dp</dimen>
+    <dimen name="iv_zoom_size">40dp</dimen>
+    <dimen name="iv_zoom_alpha">25</dimen>
 </resources>

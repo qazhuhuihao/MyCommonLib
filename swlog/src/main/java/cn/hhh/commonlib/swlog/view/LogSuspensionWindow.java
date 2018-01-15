@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -60,6 +61,7 @@ public class LogSuspensionWindow {
     private TextView tvTitle, tvZoom, tvLog;
     private HorizontalScrollView hsvLog;
     private ScrollView svLog;
+    private ImageView ivZoom;
 
     @SuppressWarnings("FieldCanBeLocal")
     private int zoomDuration = 1200;
@@ -74,6 +76,10 @@ public class LogSuspensionWindow {
     private int cTitleWidth;
     private int cZoomWidth;
 
+
+    /**
+     * 悬浮窗移动需要的变量
+     */
     private int mStartX;
     private int mStartY;
     private int mDeviationX;
@@ -82,6 +88,12 @@ public class LogSuspensionWindow {
     private int mEndY;
     private int mWindowX;
     private int mWindowY;
+
+    /**
+     * 悬浮窗缩放需要的变量
+     */
+    private boolean isIvZoomDown;
+    private boolean ivZoomLongDown;
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int mMinMove = 30;
@@ -200,6 +212,7 @@ public class LogSuspensionWindow {
         tvLog = rootView.findViewById(R.id.tv_log);
         hsvLog = rootView.findViewById(R.id.hsv_log);
         svLog = rootView.findViewById(R.id.sv_log);
+        ivZoom = rootView.findViewById(R.id.iv_zoom);
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             //cvRoot.setCardBackgroundColor(UIUtil.getColor(android.R.color.white));
@@ -217,11 +230,15 @@ public class LogSuspensionWindow {
             tvZoom.setText("-");
             tvTitle.setBackground(UIUtil.getDrawable(R.drawable.corners_topleft_primary));
             tvZoom.setBackground(UIUtil.getDrawable(R.drawable.corners_topright_primarydark));
+            ivZoom.setVisibility(View.VISIBLE);
+            ivZoom.setImageAlpha(25);
         } else {
             hsvLog.setVisibility(View.GONE);
             tvZoom.setText("+");
             tvTitle.setBackground(UIUtil.getDrawable(R.drawable.corners_left_primary));
             tvZoom.setBackground(UIUtil.getDrawable(R.drawable.corners_right_primarydark));
+            ivZoom.setVisibility(View.GONE);
+
         }
     }
 
@@ -235,6 +252,7 @@ public class LogSuspensionWindow {
     private void initClick() {
         tvTitle.setOnTouchListener(onTouchListener);
         tvZoom.setOnTouchListener(onTouchListener);
+        ivZoom.setOnTouchListener(ivZoomOnTouch);
         tvTitle.setOnClickListener(onClickListener);
         tvZoom.setOnClickListener(onClickListener);
 
@@ -476,6 +494,39 @@ public class LogSuspensionWindow {
             }
 
             return false;
+        }
+    };
+
+    private View.OnTouchListener ivZoomOnTouch = new View.OnTouchListener() {
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    isIvZoomDown = true;
+                    v.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isIvZoomDown) {
+                                ivZoomLongDown = true;
+                                ivZoom.setImageAlpha(255);
+                            }
+                        }
+                    }, 1000);
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+
+                    break;
+                case MotionEvent.ACTION_UP:
+                    isIvZoomDown = false;
+                    ivZoomLongDown = false;
+                    ivZoom.setImageAlpha(25);
+                    break;
+                default:
+                    break;
+            }
+            return true;
         }
     };
 
