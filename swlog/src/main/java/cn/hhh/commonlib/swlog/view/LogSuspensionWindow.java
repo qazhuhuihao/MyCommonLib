@@ -70,12 +70,12 @@ public class LogSuspensionWindow {
     private TimeInterpolator mInterpolator;
 
     private int windowWidth;
+    private int windowHeight;
 
     private int cRadius;
     private int cTitleHeight;
     private int cTitleWidth;
     private int cZoomWidth;
-
 
     /**
      * 悬浮窗移动需要的变量
@@ -94,6 +94,11 @@ public class LogSuspensionWindow {
      */
     private boolean isIvZoomDown;
     private boolean ivZoomLongDown;
+    private int mStartHeight, mStartWidth;
+    private ViewGroup.LayoutParams llTitleLayoutParams;
+    private ViewGroup.LayoutParams tvTitleLayoutParams;
+    private ViewGroup.LayoutParams hsvLogLayoutParams;
+    private ViewGroup.LayoutParams svLogLayoutParams;
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int mMinMove = 30;
@@ -214,6 +219,11 @@ public class LogSuspensionWindow {
         svLog = rootView.findViewById(R.id.sv_log);
         ivZoom = rootView.findViewById(R.id.iv_zoom);
 
+        llTitleLayoutParams = llTitle.getLayoutParams();
+        tvTitleLayoutParams = tvTitle.getLayoutParams();
+        hsvLogLayoutParams = hsvLog.getLayoutParams();
+        svLogLayoutParams = svLog.getLayoutParams();
+
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             //cvRoot.setCardBackgroundColor(UIUtil.getColor(android.R.color.white));
             cvRoot.setCardElevation(0);
@@ -269,6 +279,7 @@ public class LogSuspensionWindow {
         Point point = new Point();
         mWindowManager.getDefaultDisplay().getSize(point);
         windowWidth = point.x;
+        windowHeight = point.y;
     }
 
     private void initAnimation() {
@@ -510,13 +521,47 @@ public class LogSuspensionWindow {
                             if (isIvZoomDown) {
                                 ivZoomLongDown = true;
                                 ivZoom.setImageAlpha(255);
+                                mStartWidth = tvTitleLayoutParams.width;
+                                mStartHeight = svLogLayoutParams.height;
                             }
                         }
                     }, 1000);
-
+                    mStartX = (int) event.getRawX();
+                    mStartY = (int) event.getRawY();
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    mEndX = (int) event.getRawX();
+                    mEndY = (int) event.getRawY();
+                    if (isIvZoomDown) {
+                        if (!ivZoomLongDown && needIntercept()) {
+                            isIvZoomDown = false;
+                        } else if (ivZoomLongDown) {
+                            int baseWidth = mStartWidth + mEndX - mStartX;
+                            int baseHeight = mStartHeight + mEndY - mStartY;
+                            if (baseWidth < cTitleHeight)
+                                baseWidth = cTitleHeight;
+                            if (baseHeight < cTitleHeight)
+                                baseHeight = cTitleHeight;
 
+                            if (baseHeight > windowHeight - cTitleHeight * 2)
+                                baseHeight = windowHeight - cTitleHeight * 2;
+
+                            if (baseWidth > windowWidth - cZoomWidth)
+                                baseWidth = windowWidth - cZoomWidth;
+
+                            cTitleWidth = baseWidth;
+
+                            llTitleLayoutParams.width = baseWidth + cZoomWidth;
+                            tvTitleLayoutParams.width = baseWidth;
+                            hsvLogLayoutParams.width = baseWidth + cZoomWidth;
+                            svLogLayoutParams.height = baseHeight;
+
+                            llTitle.setLayoutParams(llTitleLayoutParams);
+                            tvTitle.setLayoutParams(tvTitleLayoutParams);
+                            hsvLog.setLayoutParams(hsvLogLayoutParams);
+                            svLog.setLayoutParams(svLogLayoutParams);
+                        }
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     isIvZoomDown = false;

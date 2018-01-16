@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'com.qazhuhuihao:commonlib:0.0.1'
+    compile 'com.qazhuhuihao:commonlib:0.0.2'
     //获取照片
     compile('com.github.liqinew:photoframe:v.1.0.3') {
         exclude module: 'support-v7'
