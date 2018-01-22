@@ -1,1 +1,1 @@
-include ':sample', ':commonlib', ':rx', ':retrofit', ':glide', ':filephoto', ':swlog'
+include ':sample', ':commonlib', ':rx', ':retrofit', ':glide', ':filephoto', ':swlog', ':xlog'

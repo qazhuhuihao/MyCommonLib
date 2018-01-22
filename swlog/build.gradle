@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'com.qazhuhuihao:commonlib:0.0.2'
+    implementation project(':commonlib')
     implementation 'com.android.support:cardview-v7:27.0.2'
 }
 

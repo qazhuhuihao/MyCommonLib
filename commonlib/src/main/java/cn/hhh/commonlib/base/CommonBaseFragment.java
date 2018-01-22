@@ -1,6 +1,7 @@
 package cn.hhh.commonlib.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,12 @@ public class CommonBaseFragment extends Fragment {
     public void onResume() {
         Logg.d(TAG, TAG + "-->onResume()");
         super.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logg.d(TAG, TAG + "-->onActivityResult()");
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

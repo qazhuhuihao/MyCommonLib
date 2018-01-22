@@ -43,7 +43,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.yanzhenjie:permission:1.0.8'
-    compile 'com.qazhuhuihao:commonlib:0.0.2'
+    implementation project(':commonlib')
     implementation project(':filephoto')
     implementation project(':glide')
     implementation project(':retrofit')

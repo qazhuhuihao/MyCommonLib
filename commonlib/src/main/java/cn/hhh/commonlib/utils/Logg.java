@@ -1,5 +1,9 @@
 package cn.hhh.commonlib.utils;
 
+import android.support.v4.util.ArraySet;
+
+import java.util.Set;
+
 import cn.hhh.commonlib.common.Configs;
 
 /**
@@ -11,66 +15,97 @@ import cn.hhh.commonlib.common.Configs;
 public final class Logg {
     private static boolean DEBUG = Configs.DEBUG;
 
-    private static LoggInterface logg = new LoggExample();
+    private static Set<LoggInterface> loggs = new ArraySet<>();
 
-    public static String getTAG(){
-        return logg.getTAG();
+    public static Set<LoggInterface> getLoggs() {
+        return loggs;
     }
 
-    public static void setLogg(LoggInterface logg) {
-        Logg.logg = logg;
+    public static void addLogg(LoggInterface logg) {
+        loggs.add(logg);
     }
 
     public static void v(String tag, String msg) {
-        logg.v(tag, msg);
+        for (LoggInterface logg : loggs) {
+            logg.v(tag, msg);
+        }
     }
 
     public static void v(final String tag, Object... objs) {
-        logg.v(tag, objs);
+        v(tag, getInfo(objs));
     }
 
     public static void w(String tag, String msg) {
-        logg.w(tag, msg);
+        for (LoggInterface logg : loggs) {
+            logg.w(tag, msg);
+        }
     }
 
     public static void w(final String tag, Object... objs) {
-        logg.w(tag, objs);
+        w(tag, getInfo(objs));
     }
 
     public static void i(String tag, String msg) {
-        logg.i(tag, msg);
+        for (LoggInterface logg : loggs) {
+            logg.i(tag, msg);
+        }
     }
 
     public static void i(final String tag, Object... objs) {
-        logg.i(tag, objs);
+        i(tag, getInfo(objs));
     }
 
     public static void d(String tag, String msg) {
-        logg.d(tag, msg);
+        for (LoggInterface logg : loggs) {
+            logg.d(tag, msg);
+        }
     }
 
     public static void d(final String tag, Object... objs) {
-        logg.d(tag, objs);
+        d(tag, getInfo(objs));
+
     }
 
     public static void e(String tag, String msg) {
-        logg.e(tag, msg);
+        for (LoggInterface logg : loggs) {
+            logg.e(tag, msg);
+        }
     }
 
     public static void e(String tag, String msg, Throwable e) {
-        logg.e(tag, msg, e);
+        for (LoggInterface logg : loggs) {
+            logg.e(tag, msg, e);
+        }
     }
 
     public static void e(final String tag, Object... objs) {
-        logg.e(tag, objs);
+        e(tag, getInfo(objs));
+
     }
 
     public static void sysOut(Object msg) {
-        logg.sysOut(msg);
+        for (LoggInterface logg : loggs) {
+            logg.sysOut(msg);
+        }
     }
 
     public static void sysErr(Object msg) {
-        logg.sysErr(msg);
+        for (LoggInterface logg : loggs) {
+            logg.sysErr(msg);
+        }
+    }
+
+    private static String getInfo(Object... objs) {
+        StringBuilder sb = new StringBuilder();
+        if (null == objs) {
+            sb.append("no message.");
+        } else {
+            for (Object object : objs) {
+                sb.append("--");
+                sb.append(object);
+            }
+        }
+        return sb.toString();
     }
 
     public interface LoggInterface {
@@ -78,25 +113,15 @@ public final class Logg {
 
         void v(String tag, String msg);
 
-        void v(final String tag, Object... objs);
-
         void w(String tag, String msg);
-
-        void w(final String tag, Object... objs);
 
         void i(String tag, String msg);
 
-        void i(final String tag, Object... objs);
-
         void d(String tag, String msg);
-
-        void d(final String tag, Object... objs);
 
         void e(String tag, String msg);
 
         void e(String tag, String msg, Throwable e);
-
-        void e(final String tag, Object... objs);
 
         void sysOut(Object msg);
 
@@ -118,21 +143,9 @@ public final class Logg {
         }
 
         @Override
-        public void v(final String tag, Object... objs) {
-            if (!DEBUG) return;
-            android.util.Log.v(tag, getInfo(objs));
-        }
-
-        @Override
         public void w(String tag, String msg) {
             if (!DEBUG) return;
             android.util.Log.w(tag, msg);
-        }
-
-        @Override
-        public void w(final String tag, Object... objs) {
-            if (!DEBUG) return;
-            android.util.Log.w(tag, getInfo(objs));
         }
 
         @Override
@@ -142,21 +155,9 @@ public final class Logg {
         }
 
         @Override
-        public void i(final String tag, Object... objs) {
-            if (!DEBUG) return;
-            android.util.Log.i(tag, getInfo(objs));
-        }
-
-        @Override
         public void d(String tag, String msg) {
             if (!DEBUG) return;
             android.util.Log.d(tag, msg);
-        }
-
-        @Override
-        public void d(final String tag, Object... objs) {
-            if (!DEBUG) return;
-            android.util.Log.d(tag, getInfo(objs));
         }
 
         @Override
@@ -169,25 +170,6 @@ public final class Logg {
         public void e(String tag, String msg, Throwable e) {
             if (!DEBUG) return;
             android.util.Log.e(tag, msg, e);
-        }
-
-        @Override
-        public void e(final String tag, Object... objs) {
-            if (!DEBUG) return;
-            android.util.Log.e(tag, getInfo(objs));
-        }
-
-        private String getInfo(Object... objs) {
-            StringBuilder sb = new StringBuilder();
-            if (null == objs) {
-                sb.append("no message.");
-            } else {
-                for (Object object : objs) {
-                    sb.append("--");
-                    sb.append(object);
-                }
-            }
-            return sb.toString();
         }
 
         @Override

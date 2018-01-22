@@ -124,10 +124,8 @@ public class LogSuspensionWindow {
     }
 
     public void onCreate() {
-        if (!Logg.getTAG().equals(SWLogg.class.getSimpleName())) {
-            SWLogg.printToSW = true;
-            Logg.setLogg(new SWLogg());
-        }
+        Logg.addLogg(SWLogg.getInstance());
+        SWLogg.printToSW = true;
         onDestroy();
         Logg.i(TAG, "onCreate");
         init();

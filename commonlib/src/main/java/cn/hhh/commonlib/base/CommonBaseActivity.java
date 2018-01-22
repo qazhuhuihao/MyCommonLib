@@ -1,6 +1,7 @@
 package cn.hhh.commonlib.base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,12 @@ public class CommonBaseActivity extends AppCompatActivity {
     protected void onResume() {
         Logg.d(TAG, TAG + "-->onResume()");
         super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logg.d(TAG, TAG + "-->onActivityResult()");
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

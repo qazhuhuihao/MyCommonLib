@@ -21,6 +21,7 @@ public class ImgLoadUtil {
 
     public static void load(String path, ImageView view) {
         Glide.with(UIUtil.getContext()).load(path).into(view);
+        //GildeApp
     }
 
     public static void load(Context context, String path, ImageView view) {
