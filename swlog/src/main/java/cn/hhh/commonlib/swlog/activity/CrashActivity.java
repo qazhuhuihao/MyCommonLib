@@ -11,12 +11,19 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 
 import cn.hhh.commonlib.base.CommonBaseActivity;
+import cn.hhh.commonlib.imp.FileNameSelector;
 import cn.hhh.commonlib.swlog.R;
 import cn.hhh.commonlib.swlog.adapter.CrashFileAdapter;
 import cn.hhh.commonlib.utils.FileStorageUtil;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author qazhu
@@ -32,6 +39,7 @@ public class CrashActivity extends CommonBaseActivity {
     private TextView tvBody;
 
     private CrashFileAdapter adapter;
+    private Disposable disposable;
 
     private int viewType = 0;
 
@@ -46,7 +54,7 @@ public class CrashActivity extends CommonBaseActivity {
         tvBody = findView(R.id.tv_body);
 
         rvNames.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new CrashFileAdapter(this, FileStorageUtil.getLogDir().listFiles(), onClickListener);
+        adapter = new CrashFileAdapter(this, FileStorageUtil.getLogDir().listFiles(new FileNameSelector("txt", "log", "crashLog")), onClickListener);//new FileNameSelector("txt", "log", "crashLog")
         rvNames.setAdapter(adapter);
     }
 
@@ -56,27 +64,60 @@ public class CrashActivity extends CommonBaseActivity {
             viewType = 0;
             rvNames.setVisibility(View.VISIBLE);
             svBody.setVisibility(View.GONE);
+            unSubscribe();
             return true;
         }
         isCreate = false;
         return super.onKeyDown(keyCode, event);
     }
 
-    private String read(File file) {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
+    private void read(final TextView tv, final File file) {
+
+        disposable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                StringBuilder stringBuilder = new StringBuilder();
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+                bufferedReader.close();
+                fileReader.close();
+                emitter.onNext(stringBuilder.toString());
+                emitter.onComplete();
             }
-            bufferedReader.close();
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        tv.setText(s);
+                    }
+                });
+
+//        StringBuilder stringBuilder = new StringBuilder();
+//        try {
+//            FileReader fileReader = new FileReader(file);
+//            BufferedReader bufferedReader = new BufferedReader(fileReader);
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                stringBuilder.append(line).append("\n");
+//            }
+//            bufferedReader.close();
+//            fileReader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        tv.setText(stringBuilder.toString());
+
+    }
+
+    private void unSubscribe() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
         }
-        return stringBuilder.toString();
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -89,7 +130,7 @@ public class CrashActivity extends CommonBaseActivity {
                 tvBody.setText("读取中...");
                 viewType = 1;
                 File file = (File) v.getTag();
-                tvBody.setText(read(file));
+                read(tvBody, file);
 
             }
         }

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,10 +19,11 @@ import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.common.DeviceInfo;
 import cn.hhh.commonlib.manager.AppManager;
 import cn.hhh.commonlib.rx.RxBus;
-import cn.hhh.commonlib.swlog.bean.MyLogBean;
 import cn.hhh.commonlib.swlog.view.LogSuspensionWindow;
 import cn.hhh.commonlib.utils.FileStorageUtil;
+import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.UIUtil;
+import cn.hhh.commonlib.xlog.XLogInit;
 
 /**
  * @author hhh
@@ -81,8 +81,8 @@ public class MainActivity extends CommonBaseActivity {
         CrashHandler.init(UIUtil.getContext());
 
         LogSuspensionWindow.getInstance().onCreate();
-        for (int j = 0; j < 200; j++) {
-            LogSuspensionWindow.getInstance().addLog(new MyLogBean(Log.DEBUG, TAG, Integer.toString(i++)));
+        for (int j = 0; j < 10; j++) {
+            Logg.i(TAG, Integer.toString(i++));
         }
 
     }
@@ -113,7 +113,14 @@ public class MainActivity extends CommonBaseActivity {
         public void onClick(View v) {
             int i = new Random().nextInt();
             RxBus.getDefault().post(i);
-            startActivity(new Intent(MainActivity.this,BActivity.class));
+            startActivity(new Intent(MainActivity.this, BActivity.class));
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        XLogInit.flush();
+
+        super.onDestroy();
+    }
 }

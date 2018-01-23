@@ -1,6 +1,5 @@
 package cn.hhh.commonlib.utils;
 
-import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import java.text.DateFormat;
@@ -8,12 +7,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * function : 日期时间工具类.
  */
 @SuppressWarnings({"WeakerAccess", "unused", "deprecation"})
-@SuppressLint("SimpleDateFormat")
+//@SuppressLint("SimpleDateFormat")
 public class DateTimeUtil {
 
     /**
@@ -290,21 +290,21 @@ public class DateTimeUtil {
      * 格式化时间
      */
     public static String formatDate(long dateL, String formater) {
-        return new SimpleDateFormat(formater).format(new Date(dateL));
+        return new SimpleDateFormat(formater, Locale.getDefault()).format(new Date(dateL));
     }
 
     /**
      * 格式化日期
      */
     public static String formatDate(Date date, String formater) {
-        return new SimpleDateFormat(formater).format(date);
+        return new SimpleDateFormat(formater, Locale.getDefault()).format(date);
     }
 
     /**
      * 将日期字符串转成日期
      */
     public static Date parseDate(String strDate, String formater) {
-        DateFormat dateFormat = new SimpleDateFormat(formater);
+        DateFormat dateFormat = new SimpleDateFormat(formater, Locale.getDefault());
         Date returnDate = null;
         try {
             returnDate = dateFormat.parse(strDate);

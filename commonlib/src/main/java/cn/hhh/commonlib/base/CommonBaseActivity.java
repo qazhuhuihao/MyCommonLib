@@ -23,7 +23,7 @@ import cn.hhh.commonlib.utils.Logg;
  * @author hhh
  * @date 2017/3/22
  */
-@SuppressWarnings({"unused", "SameReturnValue"})
+@SuppressWarnings({"unused"})
 public class CommonBaseActivity extends AppCompatActivity {
     /**
      * 日志输出标志,当前类的类名

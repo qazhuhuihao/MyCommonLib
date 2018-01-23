@@ -49,4 +49,5 @@ dependencies {
     implementation project(':retrofit')
     implementation project(':rx')
     implementation project(':swlog')
+    implementation project(':xlog')
 }

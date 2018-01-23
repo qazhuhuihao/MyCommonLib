@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import cn.hhh.commonlib.imp.FileNameSelector;
 import cn.hhh.commonlib.utils.DateTimeUtil;
 import cn.hhh.commonlib.utils.FileStorageUtil;
 import cn.hhh.commonlib.utils.Logg;
@@ -128,7 +129,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
         // 本次记录文件名
         Date date = new Date(); // 当前时间
-        String logFileName = "Crash_" + formatter.format(date) + "_" + (throwable.getClass().getSimpleName()) + ".txt";
+        String logFileName = "Crash_" + formatter.format(date) + "_" + (throwable.getClass().getSimpleName()) + ".crashLog";
         Logg.e(TAG, logFileName);
         File logex = new File(logDir, logFileName);
         logex.createNewFile();
@@ -161,7 +162,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @param logDir 日志目录
      */
     private void clearLogExMax(File logDir) {
-        File[] logList = logDir.listFiles();
+        File[] logList = logDir.listFiles(new FileNameSelector("txt", "crashLog"));
         if (logList == null || logList.length == 0) {
             return;
         }

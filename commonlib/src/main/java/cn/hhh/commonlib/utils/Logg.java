@@ -11,7 +11,7 @@ import cn.hhh.commonlib.common.Configs;
  * <p></p>
  * Created by lzj on 2015/12/31.
  */
-@SuppressWarnings("all")
+@SuppressWarnings({"unused","WeakerAccess"})
 public final class Logg {
     private static boolean DEBUG = Configs.DEBUG;
 

@@ -2,6 +2,7 @@ package cn.hhh.mycommonlib;
 
 import cn.hhh.commonlib.MyBaseApplication;
 import cn.hhh.commonlib.common.Configs;
+import cn.hhh.commonlib.xlog.XLogInit;
 
 /**
  * @author qazhu
@@ -16,6 +17,8 @@ public class MyApplication extends MyBaseApplication {
 
         //栗子默认使用debug模式
         Configs.DEBUG = true;
+
+        XLogInit.init(this);
     }
 
 }
