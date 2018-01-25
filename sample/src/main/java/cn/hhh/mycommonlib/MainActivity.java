@@ -78,8 +78,11 @@ public class MainActivity extends CommonBaseActivity {
         FileStorageUtil.initAppDir();
         // 初始化设备信息
         DeviceInfo.init(this);
+        //收集崩溃信息
         CrashHandler.init(UIUtil.getContext());
-
+        //初始化日志记录
+        XLogInit.init(UIUtil.getContext());
+        //打开日志悬浮窗
         LogSuspensionWindow.getInstance().onCreate();
         for (int j = 0; j < 10; j++) {
             Logg.i(TAG, Integer.toString(i++));

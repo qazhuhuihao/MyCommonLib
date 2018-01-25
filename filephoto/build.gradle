@@ -24,9 +24,7 @@ android {
 dependencies {
     implementation project(':commonlib')
     //获取照片
-    compile('com.github.liqinew:photoframe:v.1.0.3') {
-        exclude module: 'support-v7'
-    }
+    compile'com.github.liqinew:photoframe:' + rootProject.photoframeVersion
 }
 
 //publish {

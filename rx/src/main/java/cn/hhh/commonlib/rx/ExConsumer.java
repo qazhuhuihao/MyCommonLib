@@ -8,11 +8,11 @@ import io.reactivex.functions.Consumer;
  * @date 2017/11/25
  */
 @SuppressWarnings("unused")
-public class ExConsumer implements Consumer<Exception> {
+public class ExConsumer implements Consumer<Throwable> {
     private static final String TAG = ExConsumer.class.getSimpleName();
 
     @Override
-    public void accept(Exception e) throws Exception {
+    public void accept(Throwable e) throws Exception {
         //CrashHandler.addCrash("", e);
         Logg.e(TAG, "", e);
     }
