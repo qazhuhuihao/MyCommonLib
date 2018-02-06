@@ -51,10 +51,10 @@ public class FileStorageUtil {
      */
     public static void clearCacheDir() {
         File cacheFile = UIUtil.getContext().getCacheDir();
-        deleteFolderFile(cacheFile, false, false);
+        deleteDirsAndFile(cacheFile);
 
         File externalCacheDir = UIUtil.getContext().getExternalCacheDir();
-        deleteFolderFile(externalCacheDir, false, false);
+        deleteDirsAndFile(externalCacheDir);
     }
 
     /**
@@ -412,50 +412,31 @@ public class FileStorageUtil {
         return result;
     }
 
-    /**
-     * 删除指定目录下文件及目录 (自定义删除目录及文件)
-     *
-     * @param deleteThisPath  是否删除根目录
-     * @param deleteDirectory 是否删除文件夹
-     * @param rootFile        根文件
-     * @return
-     */
-    public static void deleteFolderFile(File rootFile, boolean deleteThisPath, boolean deleteDirectory) {
-        try {
-            // 处理目录
-            if (rootFile.isDirectory()) {
-                File[] files = rootFile.listFiles();
-                for (File file : files) {
-                    deleteFolderFile(file, deleteDirectory, deleteDirectory);
-                }
-            }
-            if (deleteThisPath && deleteDirectory) {
-                if (rootFile.isFile()) {// 如果是文件，删除
-                    rootFile.delete();
-                } else {// 目录
-                    if (rootFile.listFiles().length == 0) {// 目录下没有文件或者目录，删除
-                        rootFile.delete();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public static boolean deleteDirsAndFile(File dir, boolean deletePath) {
+        if (dir == null) return true;
+        deleteDirsAndFile(dir);
+        dir.delete();
+        return true;
     }
 
     /**
-     * 删除指定目录下文件及目录 (自定义删除目录及文件)
-     *
-     * @param deleteThisPath  是否删除根目录
-     * @param deleteDirectory 是否删除文件夹
-     * @param filePath        文件路径
-     * @return
+     * 删除目录下所有文件包括子目录
+     * @param dir 文件路径
+     * @return true
      */
-    public static void deleteFolderFile(String filePath, boolean deleteThisPath, boolean deleteDirectory) {
-        if (!TextUtils.isEmpty(filePath)) {
-            deleteFolderFile(new File(filePath), deleteThisPath, deleteDirectory);
+    public static boolean deleteDirsAndFile(File dir) {
+        //if (dir == null) return true;
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            return true;
         }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                deleteDirsAndFile(file);
+            }
+            file.delete();
+        }
+        return true;
     }
 
     /**

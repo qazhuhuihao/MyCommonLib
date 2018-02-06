@@ -106,7 +106,7 @@ public class AppManager {
             public void run() {
                 System.exit(0);
             }
-        }, 2000);
+        }, 1000);
     }
 
     /**

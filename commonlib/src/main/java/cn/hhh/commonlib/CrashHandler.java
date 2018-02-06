@@ -167,8 +167,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
             return;
         }
         int length = logList.length;
-        //保存20条
-        if (length >= 20) {
+        //保存10条
+        if (length >= 10) {
             for (File aLogList : logList) {
                 try {
                     if (aLogList.delete()) {
