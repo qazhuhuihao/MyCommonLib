@@ -15,16 +15,25 @@ import cn.hhh.commonlib.CrashHandler;
 @SuppressWarnings("unused")
 public class GsonUtil {
 
+    private static Gson gson;
+
+    private static Gson getGson() {
+        if (null == gson)
+            gson = new Gson();
+
+        return gson;
+    }
+
     public static <T> T jsonToBean(String jsonString, Class<T> cls) {
         T t = null;
         try {
             Logg.sysOut("jsonString: " + jsonString);
-            Gson gson = new Gson();
-            t = gson.fromJson(jsonString, cls);
+
+            t = getGson().fromJson(jsonString, cls);
 
         } catch (Exception e) {
             Logg.e("解析发生异常：" + e.getMessage());
-            CrashHandler.addCrash(jsonString,e);
+            CrashHandler.addCrash(jsonString, e);
         }
         return t;
     }
@@ -33,12 +42,11 @@ public class GsonUtil {
         T t = null;
         try {
             Logg.sysOut("jsonString: " + jsonString);
-            Gson gson = new Gson();
-            t = gson.fromJson(jsonString, typeOfT);
+            t = getGson().fromJson(jsonString, typeOfT);
 
         } catch (Throwable e) {
             Logg.e("解析发生异常：" + e.getMessage());
-            CrashHandler.addCrash(jsonString,e);
+            CrashHandler.addCrash(jsonString, e);
         }
         return t;
     }
