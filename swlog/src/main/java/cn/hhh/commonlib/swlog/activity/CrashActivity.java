@@ -54,7 +54,7 @@ public class CrashActivity extends CommonBaseActivity {
         tvBody = findView(R.id.tv_body);
 
         rvNames.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new CrashFileAdapter(this, FileStorageUtil.getLogDir().listFiles(new FileNameSelector("txt", "log", "crashLog")), onClickListener);//new FileNameSelector("txt", "log", "crashLog")
+        adapter = new CrashFileAdapter(FileStorageUtil.getLogDir().listFiles(new FileNameSelector("txt", "log", "crashLog")), onClickListener);//new FileNameSelector("txt", "log", "crashLog")
         rvNames.setAdapter(adapter);
     }
 

@@ -1,6 +1,5 @@
 package cn.hhh.commonlib.swlog.adapter;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +17,10 @@ import cn.hhh.commonlib.swlog.R;
 
 public class CrashFileAdapter extends RecyclerView.Adapter<CrashFileAdapter.CrashFileViewHolder> {
 
-    private Activity activity;
     private File[] files;
     private View.OnClickListener onClickListener;
 
-    public CrashFileAdapter(Activity activity, File[] files, View.OnClickListener onClickListener) {
-        this.activity = activity;
+    public CrashFileAdapter(File[] files, View.OnClickListener onClickListener) {
         this.files = files;
         this.onClickListener = onClickListener;
     }
@@ -48,7 +45,7 @@ public class CrashFileAdapter extends RecyclerView.Adapter<CrashFileAdapter.Cras
     class CrashFileViewHolder extends RecyclerView.ViewHolder {
         TextView tvName;
 
-        public CrashFileViewHolder(View itemView) {
+        CrashFileViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_name);
         }

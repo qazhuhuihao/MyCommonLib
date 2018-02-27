@@ -223,7 +223,6 @@ public class LogSuspensionWindow {
         svLogLayoutParams = svLog.getLayoutParams();
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            //cvRoot.setCardBackgroundColor(UIUtil.getColor(android.R.color.white));
             cvRoot.setCardElevation(0);
         }
 
@@ -232,7 +231,6 @@ public class LogSuspensionWindow {
 
     private void setZoom(int zoomLevel) {
         this.zoomLevel = zoomLevel;
-        //Logg.i(TAG, "zoomLevel:" + zoomLevel);
         if (0 < zoomLevel) {
             hsvLog.setVisibility(View.VISIBLE);
             tvZoom.setText("-");
@@ -373,7 +371,6 @@ public class LogSuspensionWindow {
                     ceAnimator.setDuration(zeDuration).start();
 
                 }
-                //Logg.i(TAG, "onAnimationEnd()");
             }
         });
         cvRoot.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -405,7 +402,6 @@ public class LogSuspensionWindow {
         public void onClick(View v) {
             int i = v.getId();
             if (i == R.id.tv_title) {
-                //Logg.i(TAG, "tv_title -> onClick");
                 try {
                     if (PackageManagerUtil.isAppOnForeground(UIUtil.getContext())) {
                         ActivityManager am = (ActivityManager) UIUtil.getContext().getSystemService(Context.ACTIVITY_SERVICE);
@@ -418,7 +414,6 @@ public class LogSuspensionWindow {
                 }
 
             } else if (i == R.id.tv_zoom) {
-                //Logg.i(TAG, "tv_zoom -> onClick");
                 if (0 == zoomLevel) {
                     zoomLevel = 1 - zoomLevel;
                 } else {
