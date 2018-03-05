@@ -93,6 +93,7 @@ public final class DeviceInfo {
     private static void printfDeviceInfo() {
         Logg.i(TAG, "----------DeviceInfo start----------");
         Logg.i(TAG, "DEBUG:", Configs.DEBUG);
+        Logg.i(TAG, "Device:", android.os.Build.BRAND , android.os.Build.MODEL , android.os.Build.VERSION.RELEASE);
         Logg.i(TAG, "ScreenHeightPixels:", ScreenHeightPixels, ", ScreenWidthPixels:", ScreenWidthPixels);
         Logg.i(TAG, "ScreenDensity:", ScreenDensity, ", ScreenDensityDpi:", ScreenDensityDpi, ", ScreenScaledDensity:", ScreenScaledDensity);
         Logg.i(TAG, "systemLastLocale:", systemLastLocale);

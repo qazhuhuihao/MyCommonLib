@@ -321,7 +321,7 @@ public class FileStorageUtil {
     }
 
     /**
-     * 将asset资产目录下的文件拷贝到内存中
+     * 将asset资源目录下的文件拷贝到指定目录
      *
      * @param context       上下文
      * @param targetDir     拷贝目标目录
