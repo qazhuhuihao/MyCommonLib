@@ -20,7 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class cn.hhh.**{*;} #个人通用类不参与混淆
+#-keep class cn.hhh.**{*;} #个人通用类不参与混淆
+-keep class cn.hhh.commonlib.xlog.XLogInit{*;}
 
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
