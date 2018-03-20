@@ -21,76 +21,69 @@ import cn.hhh.commonlib.utils.Logg;
 public class CommonBaseFragment extends Fragment {
     /** 日志输出标志 **/
     protected final String TAG = this.getClass().getSimpleName();
-    /** fragment根布局 */
-    //protected View mRootView;
 
     @Override
     public void onAttach(Context context) {
-        Logg.d(TAG, TAG + "-->onAttach()");
+        Logg.d(TAG, "-->onAttach(context:" + context.toString() + ")");
         super.onAttach(context);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Logg.d(TAG, TAG + "-->onActivityCreated()");
+        Logg.d(TAG, "-->onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Logg.d(TAG, TAG + "-->onCreate()");
+        Logg.d(TAG, "-->onCreate()");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onResume() {
-        Logg.d(TAG, TAG + "-->onResume()");
+        Logg.d(TAG, "-->onResume()");
         super.onResume();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Logg.d(TAG, TAG + "-->onActivityResult()");
+        Logg.d(TAG, "-->onActivityResult(requestCode:" + requestCode + ", resultCode:" + resultCode + ", data:" + (data == null ? "null" : data.toString()) + ")");
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onStop() {
-        Logg.d(TAG, TAG + "-->onStop()");
+        Logg.d(TAG, "-->onStop()");
         super.onStop();
     }
 
     @Override
     public void onPause() {
-        Logg.d(TAG, TAG + "-->onPause()");
+        Logg.d(TAG, "-->onPause()");
         super.onPause();
     }
 
     @Override
     public void onDestroyView() {
-        Logg.d(TAG, TAG + "-->onDestroyView()");
+        Logg.d(TAG, "-->onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Logg.d(TAG, TAG + "-->onDestroy()");
+        Logg.d(TAG, "-->onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        Logg.d(TAG, TAG + "-->onDetach()");
+        Logg.d(TAG, "-->onDetach()");
         super.onDetach();
     }
 
-//    @SuppressWarnings("unchecked")
-//    protected final <T extends View> T findView(int id) {
-//        return (T) mRootView.findViewById(id);
-//    }
 
-    @SuppressWarnings("unchecked")
     protected final <T extends View> T findView(View view, int id) {
-        return (T) view.findViewById(id);
+        return view.findViewById(id);
     }
 }

@@ -118,7 +118,7 @@ public class MainActivity extends CommonBaseActivity {
         public void onClick(View v) {
             int i = new Random().nextInt();
             RxBus.getDefault().post(i);
-            startActivity(new Intent(MainActivity.this, BActivity.class));
+            startActivityForResult(new Intent(MainActivity.this, BActivity.class),1);
         }
     };
 

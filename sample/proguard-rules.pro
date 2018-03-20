@@ -23,6 +23,9 @@
 #-keep class cn.hhh.**{*;} #个人通用类不参与混淆
 -keep class cn.hhh.commonlib.xlog.XLogInit{*;}
 
+#android类不参与混淆
+-keep class android.**{*;}
+
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
 

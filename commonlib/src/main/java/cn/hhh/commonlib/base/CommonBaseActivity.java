@@ -38,6 +38,7 @@ public class CommonBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logg.d(TAG, "-->onCreate()");
         // 将当前Activity压入栈
         activityWeakReference = new WeakReference<Activity>(this);
         AppManager.getAppManager().pushTask(activityWeakReference);
@@ -45,37 +46,37 @@ public class CommonBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        Logg.d(TAG, TAG + "-->onRestart()");
+        Logg.d(TAG, "-->onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onStart() {
-        Logg.d(TAG, TAG + "-->onStart()");
+        Logg.d(TAG, "-->onStart()");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Logg.d(TAG, TAG + "-->onResume()");
+        Logg.d(TAG, "-->onResume()");
         super.onResume();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Logg.d(TAG, TAG + "-->onActivityResult()");
+        Logg.d(TAG, "-->onActivityResult(requestCode:" + requestCode + ", resultCode:" + resultCode + ", data:" + (data == null ? "null" : data.toString()) + ")");
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onPause() {
-        Logg.d(TAG, TAG + "-->onPause()");
+        Logg.d(TAG, "-->onPause()");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        Logg.d(TAG, TAG + "-->onStop()");
+        Logg.d(TAG, "-->onStop()");
         super.onStop();
     }
 
@@ -92,7 +93,7 @@ public class CommonBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Logg.d(TAG, TAG + "-->onDestroy()");
+        Logg.d(TAG, "-->onDestroy()");
         if (activityWeakReference != null) {
             AppManager.getAppManager().removeTask(activityWeakReference);
         }

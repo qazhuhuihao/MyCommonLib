@@ -74,12 +74,13 @@ public class MyBaseApplication extends Application {
         return mMainThreadId;
     }
 
+    @SuppressWarnings("unused")
     public long getStartTime() {
         return startTime;
     }
 
-
-    public static MyBaseApplication getInstance() {
-        return application;
+    @SuppressWarnings("unchecked")
+    public static <T extends MyBaseApplication> T getInstance() {
+        return (T) application;
     }
 }

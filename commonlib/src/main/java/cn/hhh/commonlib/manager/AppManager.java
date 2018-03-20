@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import cn.hhh.commonlib.utils.UIUtil;
-
 /**
  * @author lxm
  * Activity管理类：用于管理Activity和退出程序
@@ -101,12 +99,12 @@ public class AppManager {
             }
         }
         activityStack.clear();
-        UIUtil.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                System.exit(0);
-            }
-        }, 1000);
+//        UIUtil.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                System.exit(0);
+//            }
+//        }, 1000);
     }
 
     /**

@@ -19,19 +19,19 @@ public abstract class CommonBaseService extends Service {
 
     @Override
     public void onCreate() {
-        Logg.d(TAG, TAG + "-->onCreate()");
+        Logg.d(TAG, "-->onCreate()");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Logg.d(TAG, TAG + "-->onStartCommand()");
-        return super.onStartCommand( intent,  flags,  startId);
+        Logg.d(TAG, "-->onStartCommand(intent:" + intent + ", flags:" + flags + ", startId:" + startId + ")");
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
-        Logg.d(TAG, TAG + "-->onDestroy()");
+        Logg.d(TAG, "-->onDestroy()");
         super.onDestroy();
     }
 
