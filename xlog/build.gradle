@@ -22,5 +22,5 @@ android {
 
 dependencies {
     implementation project(':commonlib')
-    compile 'com.github.pqpo:Log4a:' + rootProject.log4aVersion
+    api 'com.github.pqpo:Log4a:' + rootProject.log4aVersion
 }

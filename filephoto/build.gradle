@@ -24,7 +24,7 @@ android {
 dependencies {
     implementation project(':commonlib')
     //获取照片
-    compile 'com.github.liqinew:photoframe:' + rootProject.photoframeVersion
+    api 'com.github.liqinew:photoframe:' + rootProject.photoframeVersion
 }
 
 //publish {

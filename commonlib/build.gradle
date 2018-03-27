@@ -35,10 +35,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
-    compile 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
-    compile 'com.google.code.gson:gson:' + rootProject.gsonVersion
+    api 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
+    api 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
+    api 'com.google.code.gson:gson:' + rootProject.gsonVersion
 //    compile 'com.yanzhenjie:permission:1.0.8'
 
 //    //glide
