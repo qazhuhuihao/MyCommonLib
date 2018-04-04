@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.imp.FileNameSelector;
 import cn.hhh.commonlib.utils.DateTimeUtil;
 import cn.hhh.commonlib.utils.FileStorageUtil;
@@ -105,7 +106,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             if (intent != null) {
                 AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
                 PendingIntent restartIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                if (mgr != null)
+                if (mgr != null && CommonBaseActivity.activityCount > 0)
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 300, restartIntent); // 300毫秒钟后重启应用activit
             }
         }

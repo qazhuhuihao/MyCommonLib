@@ -30,6 +30,8 @@ public class CommonBaseActivity extends AppCompatActivity {
      */
     protected final String TAG = this.getClass().getSimpleName();
 
+    public static int activityCount;
+
     /**
      * 当前Activity的弱引用，防止内存泄露
      */
@@ -53,6 +55,7 @@ public class CommonBaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         Logg.d(TAG, "-->onStart()");
+        activityCount++;
         super.onStart();
     }
 
@@ -77,6 +80,7 @@ public class CommonBaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         Logg.d(TAG, "-->onStop()");
+        activityCount--;
         super.onStop();
     }
 
