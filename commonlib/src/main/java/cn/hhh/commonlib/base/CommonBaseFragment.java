@@ -3,6 +3,7 @@ package cn.hhh.commonlib.base;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -19,7 +20,9 @@ import cn.hhh.commonlib.utils.Logg;
  */
 @SuppressWarnings({"unused", "deprecation"})
 public class CommonBaseFragment extends Fragment {
-    /** 日志输出标志 **/
+    /**
+     * 日志输出标志
+     **/
     protected final String TAG = this.getClass().getSimpleName();
 
     @Override
@@ -38,6 +41,12 @@ public class CommonBaseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Logg.d(TAG, "-->onCreate()");
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Logg.d(TAG, "-->onViewCreated()");
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

@@ -2,17 +2,20 @@ package cn.hhh.commonlib.base;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
+import cn.hhh.commonlib.common.DeviceInfo;
 import cn.hhh.commonlib.manager.AppManager;
 import cn.hhh.commonlib.utils.Logg;
 
@@ -103,6 +106,16 @@ public class CommonBaseActivity extends AppCompatActivity {
         }
         super.onDestroy();
         mDestroyed = true;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Logg.d(TAG, "-->onConfigurationChanged()");
+        super.onConfigurationChanged(newConfig);
+
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        DeviceInfo.ScreenHeightPixels = dm.heightPixels;// 高
+        DeviceInfo.ScreenWidthPixels = dm.widthPixels;// 宽
     }
 
     protected final <T extends View> T findView(int id) {
