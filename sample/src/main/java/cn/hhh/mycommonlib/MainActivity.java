@@ -84,10 +84,15 @@ public class MainActivity extends CommonBaseActivity {
         //收集崩溃信息
         CrashHandler.init(UIUtil.getContext());
 
-        //打开日志悬浮窗
-        LogSuspensionWindow.getInstance().onCreate();
-        for (int j = 0; j < 10; j++) {
-            Logg.i(TAG, Integer.toString(i++));
+        try {
+            //打开日志悬浮窗
+            LogSuspensionWindow.getInstance().onCreate();
+            for (int j = 0; j < 10; j++) {
+                Logg.i(TAG, Integer.toString(i++));
+            }
+        } catch (Exception e) {
+            UIUtil.showToastShort("没有悬浮窗权限");
+            Logg.e(TAG,"",e);
         }
 
     }
