@@ -11,9 +11,9 @@ import cn.hhh.commonlib.utils.FileStorageUtil;
 import cn.hhh.commonlib.utils.Logg;
 import me.pqpo.librarylog4a.Level;
 import me.pqpo.librarylog4a.Log4a;
-import me.pqpo.librarylog4a.Logger;
 import me.pqpo.librarylog4a.appender.FileAppender;
 import me.pqpo.librarylog4a.formatter.DateFileFormatter;
+import me.pqpo.librarylog4a.logger.AppenderLogger;
 
 /**
  * @author qazhu
@@ -32,15 +32,17 @@ public class XLogInit {
         String buffer_path = log.getAbsolutePath() + File.separator + ".logCache";
         String time = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault()).format(new Date());
         String log_path = log.getAbsolutePath() + File.separator + "Log_" + time + ".log";
-        FileAppender.Builder fileBuild = new FileAppender.Builder(context)
+        FileAppender fileAppender = new FileAppender.Builder(context)
                 .setLogFilePath(log_path)
                 .setLevel(level)
                 .setBufferFilePath(buffer_path)
                 .setFormatter(new DateFileFormatter())
-                .setBufferSize(BUFFER_SIZE);
-        Logger logger = new Logger.Builder()
+                .setCompress(false)
+                .setBufferSize(BUFFER_SIZE)
+                .create();
+        AppenderLogger logger = new AppenderLogger.Builder()
                 //.enableAndroidAppender(androidBuild)
-                .enableFileAppender(fileBuild)
+                .addAppender(fileAppender)
                 .create();
         Log4a.setLogger(logger);
 

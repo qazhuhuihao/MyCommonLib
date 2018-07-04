@@ -16,7 +16,7 @@
 #   public *;
 #}
 
--keep class cn.hhh.** { *; } #个人通用类不参与混淆
+-keepnames class cn.hhh.** { *; } #个人通用类不参与混淆
 
 # Gson
 -keep class com.google.gson.stream.** { *; }

@@ -40,18 +40,18 @@ ext {
     buildToolsVersion = "27.0.3"
     minSdkVersion = 17
     targetSdkVersion = 27
-    versionCode = 5
-    versionName = "0.0.5"
+    versionCode = 6
+    versionName = "0.0.6"
     supportLibVersion = "27.+"
-    gsonVersion = "2.8.2"
+    gsonVersion = "2.8.5"
     photoframeVersion = "v.1.0.3"
-    glideVersion = "4.5.0"
-    transformationsVersion = "3.0.1"
-    retrofitVersion = "2.3.0"
-    rxjavaVersion = "2.1.6"
-    rxandroidVersion = "2.0.1"
+    glideVersion = "4.7.1"
+    transformationsVersion = "3.3.0"
+    retrofitVersion = "2.4.0"
+    rxjavaVersion = "2.1.16"
+    rxandroidVersion = "2.0.2"
     rxrelayVersion = "2.0.0"
     permissionVersion = "1.1.0"
-    log4aVersion = "v1.1.0"
+    log4aVersion = "v1.4.0"
 
 }

@@ -3,6 +3,7 @@ package cn.hhh.mycommonlib;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -92,8 +93,21 @@ public class MainActivity extends CommonBaseActivity {
             }
         } catch (Exception e) {
             UIUtil.showToastShort("没有悬浮窗权限");
-            Logg.e(TAG,"",e);
+            Logg.e(TAG, "", e);
         }
+
+        PackageManager pm = getPackageManager();
+        // 获取是否支持电话
+        Logg.d("pm", pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY));
+        // 是否支持GSM
+        Logg.d("GSM", pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_GSM));
+        // 是否支持CDMA
+        Logg.d("CDMA", pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_CDMA));
+        /*
+         * 使用hasSystemFeature方法可以检查设备是否其他功能。如陀螺仪，NFC，蓝牙等等，
+         */
+        Logg.d("NFC", pm.hasSystemFeature(PackageManager.FEATURE_NFC));
+        Logg.d("GYROSCOPE", pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE));
 
     }
 
@@ -117,13 +131,12 @@ public class MainActivity extends CommonBaseActivity {
         }
     };
 
-
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int i = new Random().nextInt();
             RxBus.getDefault().post(i);
-            startActivityForResult(new Intent(MainActivity.this, BActivity.class),1);
+            startActivityForResult(new Intent(MainActivity.this, BActivity.class), 1);
         }
     };
 

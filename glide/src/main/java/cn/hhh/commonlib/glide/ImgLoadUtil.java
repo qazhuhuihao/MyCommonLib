@@ -1,12 +1,21 @@
 package cn.hhh.commonlib.glide;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Util;
 
+import java.util.Locale;
+
+import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.UIUtil;
 
 /**
@@ -39,6 +48,20 @@ public class ImgLoadUtil {
     public static void load(Fragment fragment, Integer resourceId, ImageView view) {
         Glide.with(fragment).load(resourceId).into(view);
     }
+
+    private static RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            Logg.e(TAG, String.format(Locale.ROOT, "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            //Logg.d("GLIDE", String.format(Locale.ROOT, "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target, dataSource, isFirstResource));
+            return false;
+        }
+    };
 
 //    public static void loadGaussianBlur(Context context, String path, ImageView view) {
 //        Glide.with(context).load(path).bitmapTransform(new BlurTransformation(context, 35)).skipMemoryCache(true).into(view);

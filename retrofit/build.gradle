@@ -25,6 +25,7 @@ dependencies {
     implementation project(':commonlib')
     //retrofit2
     api 'com.squareup.retrofit2:retrofit:' + rootProject.retrofitVersion
+    api 'com.squareup.retrofit2:adapter-rxjava2:' + rootProject.retrofitVersion
 }
 
 //publish {
