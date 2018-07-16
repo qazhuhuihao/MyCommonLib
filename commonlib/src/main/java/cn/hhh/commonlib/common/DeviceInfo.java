@@ -1,6 +1,7 @@
 package cn.hhh.commonlib.common;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -9,8 +10,11 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.NetworkInterface;
@@ -20,38 +24,57 @@ import java.util.Locale;
 import java.util.UUID;
 
 import cn.hhh.commonlib.utils.Logg;
+import cn.hhh.commonlib.utils.UIUtil;
 
 
 /**
  * function : 本地设备信息配置 : 包含设备屏幕信息、系统语言、设备唯一ID.
- *
+ * <p>
  * <p></p>
  * <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
  * <uses-permission name="android.permission.ACCESS_WIFI_STATE"/>
- *
+ * <p>
  * Created by lzj on 2015/12/31.
  */
 @SuppressLint({"HardwareIds"})
 @SuppressWarnings("WeakerAccess")
 public final class DeviceInfo {
     private static final String TAG = DeviceInfo.class.getSimpleName();
-    /** 屏幕高度 */
+    /**
+     * 屏幕高度
+     */
     public static int ScreenHeightPixels = -1;
-    /** 屏幕宽度 */
+    /**
+     * 屏幕宽度
+     */
     public static int ScreenWidthPixels = -1;
-    /** 屏幕密度 */
+    /**
+     * 屏幕密度
+     */
     public static float ScreenDensity = -1;
-    /** 屏幕密度 */
+    /**
+     * 屏幕密度
+     */
     public static int ScreenDensityDpi = -1;
-    /** 屏幕字体密度 */
+    /**
+     * 屏幕字体密度
+     */
     public static float ScreenScaledDensity = -1;
-    /** 初次运行时系统语言环境 */
-    public static String systemLastLocale = null;
-    /** 当前设备的IMEI */
+//    /**
+//     * 初次运行时系统语言环境
+//     */
+//    public static String systemLastLocale = null;
+    /**
+     * 当前设备的IMEI
+     */
     public static String deviceIMEI;
-    /** 当前设备的MAC地址 */
+    /**
+     * 当前设备的MAC地址
+     */
     public static String deviceMAC;
-    /** 该设备在此程序上的唯一标识符 */
+    /**
+     * 该设备在此程序上的唯一标识符
+     */
     public static String deviceUUID;
 
     private static final String INSTALLATION = "INSTALLATION-" + UUID.nameUUIDFromBytes("androidkit".getBytes());
@@ -62,7 +85,7 @@ public final class DeviceInfo {
     @SuppressWarnings("all")
     public static void init(Context context) {
         initDisplayMetrics(context);
-        systemLastLocale = Locale.getDefault().toString();
+        //systemLastLocale = Locale.getDefault().toString();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getImei();
@@ -93,11 +116,12 @@ public final class DeviceInfo {
     private static void printfDeviceInfo() {
         Logg.i(TAG, "----------DeviceInfo start----------");
         Logg.i(TAG, "DEBUG:", Configs.DEBUG);
-        Logg.i(TAG, "Device:", android.os.Build.BRAND , android.os.Build.MODEL , android.os.Build.VERSION.RELEASE);
+        Logg.i(TAG, "Device:", android.os.Build.BRAND, android.os.Build.MODEL, android.os.Build.VERSION.RELEASE);
         Logg.i(TAG, "ScreenHeightPixels:", ScreenHeightPixels, ", ScreenWidthPixels:", ScreenWidthPixels);
         Logg.i(TAG, "ScreenDensity:", ScreenDensity, ", ScreenDensityDpi:", ScreenDensityDpi, ", ScreenScaledDensity:", ScreenScaledDensity);
-        Logg.i(TAG, "systemLastLocale:", systemLastLocale);
+        Logg.i(TAG, "systemLastLocale:", Locale.getDefault().toString());
         Logg.i(TAG, "deviceIMEI:", deviceIMEI, " , deviceMAC:", deviceMAC, " , deviceUUID:", deviceUUID);
+        Logg.i(TAG, "totalMem:", getmem_TOTAL(), " , unusedMem:", getmem_UNUSED(UIUtil.getContext()));
         Logg.i(TAG, "----------DeviceInfo end----------");
     }
 
@@ -187,5 +211,64 @@ public final class DeviceInfo {
                 Settings.Secure.ANDROID_ID).getBytes()).toString();
         out.write(uuid.getBytes());
         out.close();
+    }
+
+    /**
+     * 获得可用的内存
+     */
+    public static long getmem_UNUSED(Context mContext) {
+        long MEM_UNUSED;
+        // 得到ActivityManager
+        ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        // 创建ActivityManager.MemoryInfo对象
+
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        assert am != null;
+        am.getMemoryInfo(mi);
+
+        // 取得剩余的内存空间
+
+        MEM_UNUSED = mi.availMem / 1024;
+        return MEM_UNUSED;
+    }
+
+    /**
+     * 获得总内存
+     */
+    public static long getmem_TOTAL() {
+        long mTotal;
+        // /proc/meminfo读出的内核信息进行解释
+        String path = "/proc/meminfo";
+        String content = null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(path), 8);
+            String line;
+            if ((line = br.readLine()) != null) {
+                content = line;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        // beginIndex
+        assert content != null;
+        int begin = content.indexOf(':');
+        // endIndex
+        int end = content.indexOf('k');
+        // 截取字符串信息
+        System.out.println(content);
+        content = content.substring(begin + 1, end).trim();
+        mTotal = Integer.parseInt(content);
+        return mTotal;
     }
 }

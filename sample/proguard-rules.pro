@@ -22,6 +22,7 @@
 
 #-keep class cn.hhh.**{*;} #个人通用类不参与混淆
 -keep class cn.hhh.commonlib.xlog.XLogInit{*;}
+#-keepnames class me.pqpo.**{*;}
 
 #android类不参与混淆
 -keep class android.**{*;}

@@ -96,6 +96,10 @@ public class MainActivity extends CommonBaseActivity {
             Logg.e(TAG, "", e);
         }
 
+        String ip = IpGetUtil.getIPAddress();
+
+        Logg.d(TAG, ip == null ? "null" : ip);
+
         PackageManager pm = getPackageManager();
         // 获取是否支持电话
         Logg.d("pm", pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY));

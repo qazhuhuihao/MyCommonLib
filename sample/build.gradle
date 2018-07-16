@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
+}
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
 
@@ -28,11 +34,28 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            ndk {
+                //设置支持的SO库架构
+                abiFilters 'x86', 'armeabi-v7a'
+            }
         }
         debug {
             minifyEnabled false//debug模式开启混淆有问题
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            ndk {
+                //设置支持的SO库架构
+                abiFilters 'x86', 'armeabi-v7a'
+            }
+        }
+    }
+
+    //修改生成的apk名字
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def timeNow = getDate()
+            def fileName = 'Sample-' + "-${defaultConfig.versionName}" + '-' + timeNow + '-' + variant.buildType.name + '.apk'
+            outputFileName = new File("", fileName)
         }
     }
 }

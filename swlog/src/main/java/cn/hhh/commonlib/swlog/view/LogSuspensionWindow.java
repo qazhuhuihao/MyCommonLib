@@ -133,12 +133,17 @@ public class LogSuspensionWindow {
 
     @SuppressWarnings("all")
     public void onDestroy() {
-        if (null != rootView) {
-            //移除悬浮窗口
-            Logg.i(TAG, "removeView");
-            mWindowManager.removeView(rootView);
+        try {
+            if (null != rootView) {
+                //移除悬浮窗口
+                Logg.i(TAG, "removeView");
+                mWindowManager.removeView(rootView);
+                rootView = null;
+            }
+            Logg.i(TAG, "onDestroy");
+        } catch (Exception e) {
+            Logg.e(TAG, "onDestroy", e);
         }
-        Logg.i(TAG, "onDestroy");
 
     }
 
@@ -493,9 +498,7 @@ public class LogSuspensionWindow {
                     UIUtil.getContext().startActivity(intent);
                     return true;
                 }
-            } else if (i == R.id.tv_zoom) {
-                return true;
-            }
+            } else return i == R.id.tv_zoom;
 
             return false;
         }

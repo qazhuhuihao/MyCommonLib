@@ -53,5 +53,7 @@ ext {
     rxrelayVersion = "2.0.0"
     permissionVersion = "1.1.0"
     log4aVersion = "v1.4.0"
-
+    okhttpVersion = "3.10.0"
+    smartrefreshVersion = "1.1.0-alpha-10"
+    leakcanaryVersion = "1.5.4"
 }
