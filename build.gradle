@@ -40,8 +40,8 @@ ext {
     buildToolsVersion = "27.0.3"
     minSdkVersion = 17
     targetSdkVersion = 27
-    versionCode = 6
-    versionName = "0.0.6"
+    versionCode = 7
+    versionName = "0.0.7"
     supportLibVersion = "27.+"
     gsonVersion = "2.8.5"
     photoframeVersion = "v.1.0.3"

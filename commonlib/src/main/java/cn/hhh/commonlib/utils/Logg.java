@@ -26,6 +26,7 @@ public final class Logg {
     }
 
     public static void v(String tag, String msg) {
+        msg = filterNull(msg);
         for (LoggInterface logg : loggs) {
             logg.v(tag, msg);
         }
@@ -36,6 +37,7 @@ public final class Logg {
     }
 
     public static void w(String tag, String msg) {
+        msg = filterNull(msg);
         for (LoggInterface logg : loggs) {
             logg.w(tag, msg);
         }
@@ -46,6 +48,7 @@ public final class Logg {
     }
 
     public static void i(String tag, String msg) {
+        msg = filterNull(msg);
         for (LoggInterface logg : loggs) {
             logg.i(tag, msg);
         }
@@ -56,6 +59,7 @@ public final class Logg {
     }
 
     public static void d(String tag, String msg) {
+        msg = filterNull(msg);
         for (LoggInterface logg : loggs) {
             logg.d(tag, msg);
         }
@@ -67,12 +71,14 @@ public final class Logg {
     }
 
     public static void e(String tag, String msg) {
+        msg = filterNull(msg);
         for (LoggInterface logg : loggs) {
             logg.e(tag, msg);
         }
     }
 
     public static void e(String tag, String msg, Throwable e) {
+        msg = filterNull(msg);
         for (LoggInterface logg : loggs) {
             logg.e(tag, msg, e);
         }
@@ -106,6 +112,10 @@ public final class Logg {
             }
         }
         return sb.toString();
+    }
+
+    private static String filterNull(String msg) {
+        return msg == null ? "null" : msg;
     }
 
     public interface LoggInterface {
