@@ -54,8 +54,8 @@ android {
     android.applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def timeNow = getDate()
-            def fileName = 'Sample-' + "-${defaultConfig.versionName}" + '-' + timeNow + '-' + variant.buildType.name + '.apk'
-            outputFileName = new File("", fileName)
+            def fileName = 'Sample-' + "${defaultConfig.versionName}" + '-' + timeNow + '-' + variant.buildType.name + '.apk'
+            outputFileName = new File("release", fileName)
         }
     }
 }
