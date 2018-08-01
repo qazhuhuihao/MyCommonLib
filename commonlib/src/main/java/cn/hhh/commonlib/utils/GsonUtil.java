@@ -33,7 +33,6 @@ public class GsonUtil {
 
         } catch (Exception e) {
             Logg.e("解析发生异常：" + e.getMessage());
-            CrashHandler.addCrash(jsonString, e);
         }
         return t;
     }
@@ -46,7 +45,6 @@ public class GsonUtil {
 
         } catch (Throwable e) {
             Logg.e("解析发生异常：" + e.getMessage());
-            CrashHandler.addCrash(jsonString, e);
         }
         return t;
     }
