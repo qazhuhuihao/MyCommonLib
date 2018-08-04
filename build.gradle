@@ -2,6 +2,29 @@
 
 buildscript {
 
+    ext {
+        compileSdkVersion = 27
+        buildToolsVersion = "27.0.3"
+        minSdkVersion = 17
+        targetSdkVersion = 27
+        versionCode = 7
+        versionName = "0.0.7"
+        supportLibVersion = "27.+"
+        gsonVersion = "2.8.5"
+        photoframeVersion = "v.1.0.3"
+        glideVersion = "4.7.1"
+        transformationsVersion = "3.3.0"
+        retrofitVersion = "2.4.0"
+        rxjavaVersion = "2.1.16"
+        rxandroidVersion = "2.0.2"
+        rxrelayVersion = "2.0.0"
+        permissionVersion = "1.1.0"
+        log4aVersion = "v1.4.0"
+        okhttpVersion = "3.10.0"
+        smartrefreshVersion = "1.1.0-alpha-10"
+        leakcanaryVersion = "1.5.4"
+    }
+
     repositories {
         google()
         jcenter()
@@ -33,27 +56,4 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-ext {
-    compileSdkVersion = 27
-    buildToolsVersion = "27.0.3"
-    minSdkVersion = 17
-    targetSdkVersion = 27
-    versionCode = 7
-    versionName = "0.0.7"
-    supportLibVersion = "27.+"
-    gsonVersion = "2.8.5"
-    photoframeVersion = "v.1.0.3"
-    glideVersion = "4.7.1"
-    transformationsVersion = "3.3.0"
-    retrofitVersion = "2.4.0"
-    rxjavaVersion = "2.1.16"
-    rxandroidVersion = "2.0.2"
-    rxrelayVersion = "2.0.0"
-    permissionVersion = "1.1.0"
-    log4aVersion = "v1.4.0"
-    okhttpVersion = "3.10.0"
-    smartrefreshVersion = "1.1.0-alpha-10"
-    leakcanaryVersion = "1.5.4"
 }
