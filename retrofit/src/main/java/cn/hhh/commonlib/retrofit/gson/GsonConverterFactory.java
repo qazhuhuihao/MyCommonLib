@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import cn.hhh.commonlib.utils.GsonUtil;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -26,7 +27,7 @@ public final class GsonConverterFactory extends Converter.Factory {
      * decoding from JSON (when no charset is specified by a header) will use UTF-8.
      */
     public static GsonConverterFactory create() {
-        return create(new Gson());
+        return create(GsonUtil.getGson());
     }
 
     /**

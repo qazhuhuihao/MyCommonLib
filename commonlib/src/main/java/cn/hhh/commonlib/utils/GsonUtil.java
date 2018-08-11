@@ -17,7 +17,7 @@ public class GsonUtil {
 
     private static Gson gson;
 
-    private static Gson getGson() {
+    public static Gson getGson() {
         if (null == gson)
             gson = new Gson();
 
@@ -47,6 +47,18 @@ public class GsonUtil {
             Logg.e("解析发生异常：" + e.getMessage());
         }
         return t;
+    }
+
+    public static <T> String beanToJson(T bean) {
+        String json = null;
+
+        try {
+            json = getGson().toJson(bean);
+            Logg.sysOut(json);
+        } catch (Exception e) {
+            Logg.e("解析发生异常：" + e.getMessage());
+        }
+        return json;
     }
 
 }
