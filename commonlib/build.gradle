@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 
 //gradle.startParameter.getTaskNames().each { task ->
 //    println("task: " + task)
@@ -56,11 +56,11 @@ dependencies {
 //    }
 }
 
-publish {
-    userOrg = 'qazhuhuihao'//bintray.com用户名
-    groupId = 'com.qazhuhuihao'//jcenter上的路径
-    artifactId = 'commonlib'//项目名称
-    publishVersion = '0.0.8'//版本号
-    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
-    website = 'https://github.com/qazhuhuihao/MyCommonLib'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
-}
+//publish {
+//    userOrg = 'qazhuhuihao'//bintray.com用户名
+//    groupId = 'com.qazhuhuihao'//jcenter上的路径
+//    artifactId = 'commonlib'//项目名称
+//    publishVersion = '0.0.9'//版本号
+//    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
+//    website = 'https://github.com/qazhuhuihao/MyCommonLib'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+//}
