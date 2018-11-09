@@ -27,7 +27,7 @@ public class GsonUtil {
     public static <T> T jsonToBean(String jsonString, Class<T> cls) {
         T t = null;
         try {
-            Logg.sysOut("jsonString: " + jsonString);
+            Logg.i("jsonString: ", jsonString);
 
             t = getGson().fromJson(jsonString, cls);
 
@@ -40,7 +40,7 @@ public class GsonUtil {
     public static <T> T jsonToBean(String jsonString, Type typeOfT) {
         T t = null;
         try {
-            Logg.sysOut("jsonString: " + jsonString);
+            Logg.i("jsonString: ", jsonString);
             t = getGson().fromJson(jsonString, typeOfT);
 
         } catch (Throwable e) {
@@ -54,7 +54,7 @@ public class GsonUtil {
 
         try {
             json = getGson().toJson(bean);
-            Logg.sysOut(json);
+            Logg.i("jsonString: ", json);
         } catch (Exception e) {
             Logg.e("解析发生异常：" + e.getMessage());
         }
