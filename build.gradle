@@ -15,7 +15,7 @@ buildscript {
         glideVersion = "4.8.0"
         transformationsVersion = "3.3.0"
         retrofitVersion = "2.4.0"
-        rxjavaVersion = "2.2.2"
+        rxjavaVersion = "2.2.3"
         rxandroidVersion = "2.1.0"
         rxrelayVersion = "2.0.0"
         permissionVersion = "1.1.0"
