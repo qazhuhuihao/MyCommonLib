@@ -23,8 +23,8 @@ buildscript {
         okhttpVersion = "3.11.0"
         smartrefreshVersion = "1.1.0-alpha-14"
         leakcanaryVersion = "1.6.1"
-        kotlin_version = '1.3.0'
-        objectboxVersion = '2.1.0'
+        kotlin_version = '1.3.10'
+        objectboxVersion = '2.2.0'
     }
 
     repositories {
