@@ -1,5 +1,7 @@
 package cn.hhh.commonlib.retrofit.gson;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -19,7 +21,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
         this.adapter = adapter;
     }
 
-    @Override public T convert(ResponseBody value) throws IOException {
+    @Override public T convert(@NonNull ResponseBody value) throws IOException {
         if (Configs.DEBUG) {
             String str = value.string();
             str = str.replaceAll("[\n| ]", "");
