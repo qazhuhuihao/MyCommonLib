@@ -19,8 +19,6 @@ public class InstallApk {
         intent.setAction(Intent.ACTION_VIEW);
         //执行的数据类型
 
-        System.out.println(file.getAbsolutePath());
-
         Uri apkUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             apkUri = FileProvider.getUriForFile(UIUtil.getContext(), UIUtil.getContext().getPackageName() + ".fileprovider", file);
