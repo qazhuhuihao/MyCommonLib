@@ -8,8 +8,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.liql.photograph.interfa.OnDisposeOuterListener;
 import com.liql.photograph.interfa.OnPhotoSDKDisposeListener;

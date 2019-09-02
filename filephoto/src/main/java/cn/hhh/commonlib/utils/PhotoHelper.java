@@ -3,7 +3,8 @@ package cn.hhh.commonlib.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.liql.photograph.PhotographStaticUtils;
 import com.liql.photograph.interfa.OnDisposeOuterListener;

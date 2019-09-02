@@ -1,7 +1,8 @@
 package com.liql.photograph;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.liql.photograph.interfa.OnDisposeOuterListener;
 import com.liql.photograph.interfa.OnPhotographGetDataListener;

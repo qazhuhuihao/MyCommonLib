@@ -1,6 +1,6 @@
 package cn.hhh.commonlib.utils;
 
-import android.support.v4.util.ArraySet;
+import androidx.collection.ArraySet;
 
 import java.util.Set;
 

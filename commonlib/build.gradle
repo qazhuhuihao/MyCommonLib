@@ -35,8 +35,9 @@ android {
 }
 
 dependencies {
-    api 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
-    api 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
+    api 'androidx.appcompat:' + rootProject.appcompat
+    api 'androidx.recyclerview:' + rootProject.recyclerview
+    //api 'androidx.collection:' + rootProject.collections
     api 'com.google.code.gson:gson:' + rootProject.gsonVersion
 //    compile 'com.yanzhenjie:permission:1.0.8'
 

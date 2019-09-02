@@ -7,24 +7,28 @@ buildscript {
         buildToolsVersion = "28.0.3"
         minSdkVersion = 17
         targetSdkVersion = 28
-        versionCode = 9
-        versionName = "0.0.9"
-        supportLibVersion = "28.+"
+        versionCode = 10
+        versionName = "0.1.0"
+        //supportLibVersion = "28.+"
+        appcompat = "appcompat:1.0.0"
+        recyclerview = "recyclerview:1.0.0"
+        cardview = "cardview:1.0.0"
+
         gsonVersion = "2.8.5"
         photoframeVersion = "v.1.0.3"
         glideVersion = "4.9.0"
-        transformationsVersion = "4.0.1"
-        retrofitVersion = "2.5.0"
-        rxjavaVersion = "2.2.7"
+        transformationsVersion = "4.1.0"
+        retrofitVersion = "2.6.1"
+        rxjavaVersion = "2.2.12"
         rxandroidVersion = "2.1.1"
-        rxrelayVersion = "2.1.0"
+        rxrelayVersion = "2.1.1"
         permissionVersion = "1.1.0"
         log4aVersion = "v1.4.0"
         okhttpVersion = "3.12.0"//支持低版本
-        smartrefreshVersion = "1.1.0-alpha-20"
+        smartrefreshVersion = "1.1.0"
         leakcanaryVersion = "1.6.3"
-        kotlin_version = '1.3.21'
-        objectboxVersion = '2.3.3'
+        kotlin_version = '1.3.50'
+        objectboxVersion = '2.3.4'
     }
 
     repositories {
@@ -33,8 +37,8 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
-        classpath 'com.novoda:bintray-release:0.9'
+        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.novoda:bintray-release:0.9.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

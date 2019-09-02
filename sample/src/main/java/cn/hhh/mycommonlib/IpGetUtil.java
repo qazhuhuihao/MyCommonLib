@@ -9,7 +9,6 @@ import android.net.wifi.WifiManager;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.Enumeration;
 
 import cn.hhh.commonlib.utils.Logg;
@@ -38,7 +37,7 @@ public class IpGetUtil {
                             }
                         }
                     }
-                } catch (SocketException e) {
+                } catch (Throwable e) {
                     Logg.e(TAG, "", e);
                 }
 

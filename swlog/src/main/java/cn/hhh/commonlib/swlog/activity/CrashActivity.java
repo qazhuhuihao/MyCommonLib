@@ -1,12 +1,13 @@
 package cn.hhh.commonlib.swlog.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,7 +54,7 @@ public class CrashActivity extends CommonBaseActivity {
         svBody = findView(R.id.sv_body);
         tvBody = findView(R.id.tv_body);
 
-        rvNames.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rvNames.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         adapter = new CrashFileAdapter(FileStorageUtil.getLogDir().listFiles(new FileNameSelector("txt", "log", "crashLog")), onClickListener);//new FileNameSelector("txt", "log", "crashLog")
         rvNames.setAdapter(adapter);
     }
