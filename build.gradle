@@ -5,7 +5,7 @@ buildscript {
     ext {
         compileSdkVersion = 28
         buildToolsVersion = "28.0.3"
-        minSdkVersion = 17
+        minSdkVersion = 21
         targetSdkVersion = 28
         versionCode = 10
         versionName = "0.1.0"
@@ -24,7 +24,7 @@ buildscript {
         rxrelayVersion = "2.1.1"
         permissionVersion = "1.1.0"
         log4aVersion = "v1.4.0"
-        okhttpVersion = "3.12.0"//支持低版本
+        okhttpVersion = "3.14.2"
         smartrefreshVersion = "1.1.0"
         leakcanaryVersion = "1.6.3"
         kotlin_version = '1.3.50'
@@ -37,7 +37,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.novoda:bintray-release:0.9.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

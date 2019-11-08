@@ -6,16 +6,16 @@
     <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
     <!--&lt;!&ndash;  从SDCard读取数据权限 &ndash;&gt;-->
     <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
-    <!--<application>-->
-        <!--&lt;!&ndash;7.0需要的Uri权限提供&ndash;&gt;-->
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="${applicationId}.fileprovider"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/file_paths" />-->
-        <!--</provider>-->
-    <!--</application>-->
+    <application>
+        <!--7.0需要的Uri权限提供-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
 </manifest>

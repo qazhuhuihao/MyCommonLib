@@ -24,7 +24,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     @Override public T convert(@NonNull ResponseBody value) throws IOException {
         if (Configs.DEBUG) {
             String str = value.string();
-            str = str.replaceAll("[\n| ]", "");
+            //str = str.replaceAll("[\n| ]", "");
             System.out.println(str);
             try {
                 return adapter.fromJson(str);
