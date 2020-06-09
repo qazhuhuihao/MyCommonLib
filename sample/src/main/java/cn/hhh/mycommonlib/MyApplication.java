@@ -3,6 +3,7 @@ package cn.hhh.mycommonlib;
 import cn.hhh.commonlib.MyBaseApplication;
 import cn.hhh.commonlib.common.Configs;
 import cn.hhh.commonlib.utils.Logg;
+import cn.hhh.mycommonlib.network.Network;
 
 /**
  * @author qazhu
@@ -30,6 +31,8 @@ public class MyApplication extends MyBaseApplication {
             if (!flag)
                 Logg.addLogg(loggExample);
         }
+
+        Network.initRetrofit("https://192.168.40.148:8081/");
     }
 
 }

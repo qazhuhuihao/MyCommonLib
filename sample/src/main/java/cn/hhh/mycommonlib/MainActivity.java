@@ -1,8 +1,8 @@
 package cn.hhh.mycommonlib;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -14,18 +14,20 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
 import java.util.List;
-import java.util.Random;
 
 import cn.hhh.commonlib.CrashHandler;
 import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.common.DeviceInfo;
 import cn.hhh.commonlib.manager.AppManager;
-import cn.hhh.commonlib.rx.RxBus;
+import cn.hhh.commonlib.rx.ExConsumer;
 import cn.hhh.commonlib.swlog.view.LogSuspensionWindow;
 import cn.hhh.commonlib.utils.FileStorageUtil;
 import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.UIUtil;
 import cn.hhh.commonlib.xlog.XLogInit;
+import cn.hhh.mycommonlib.bean.BaseBean;
+import cn.hhh.mycommonlib.network.Network;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author hhh
@@ -139,11 +141,25 @@ public class MainActivity extends CommonBaseActivity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int i = new Random().nextInt();
-            RxBus.getDefault().post(i);
-            startActivityForResult(new Intent(MainActivity.this, BActivity.class), 1);
+//            int i = new Random().nextInt();
+//            RxBus.getDefault().post(i);
+//            startActivityForResult(new Intent(MainActivity.this, BActivity.class), 1);
+            sslTest();
         }
     };
+
+    @SuppressLint("CheckResult")
+    private void sslTest() {
+        //noinspection ResultOfMethodCallIgnored
+        Network
+                .test()
+                .subscribe(new Consumer<BaseBean>() {
+                    @Override
+                    public void accept(BaseBean baseBean) throws Exception {
+
+                    }
+                }, new ExConsumer());
+    }
 
     @Override
     protected void onDestroy() {
