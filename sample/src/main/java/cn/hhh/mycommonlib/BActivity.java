@@ -6,8 +6,8 @@ import android.widget.TextView;
 import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.rx.RxBus;
 import cn.hhh.commonlib.utils.Logg;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * @author hhh

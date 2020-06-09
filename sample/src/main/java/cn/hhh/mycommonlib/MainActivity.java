@@ -27,7 +27,7 @@ import cn.hhh.commonlib.utils.UIUtil;
 import cn.hhh.commonlib.xlog.XLogInit;
 import cn.hhh.mycommonlib.bean.BaseBean;
 import cn.hhh.mycommonlib.network.Network;
-import io.reactivex.functions.Consumer;
+import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * @author hhh

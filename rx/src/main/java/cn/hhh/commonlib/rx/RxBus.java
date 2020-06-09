@@ -1,9 +1,9 @@
 package cn.hhh.commonlib.rx;
 
-import com.jakewharton.rxrelay2.PublishRelay;
-import com.jakewharton.rxrelay2.Relay;
+import com.jakewharton.rxrelay3.PublishRelay;
+import com.jakewharton.rxrelay3.Relay;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * 有异常处理的 Rxbus

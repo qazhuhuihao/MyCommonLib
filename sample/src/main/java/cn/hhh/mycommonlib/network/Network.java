@@ -26,14 +26,14 @@ import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.UIUtil;
 import cn.hhh.mycommonlib.bean.BaseBean;
 import cn.hhh.mycommonlib.network.api.TestApi;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 
 public class Network {
     private static final String TAG = Network.class.getSimpleName();
@@ -48,7 +48,7 @@ public class Network {
             .hostnameVerifier(new SSLSocketFactoryUtils.TrustAllHostnameVerifier())
             .build();
     private static Converter.Factory gsonConverterFactory = GsonConverterFactory.create();
-    private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJava2CallAdapterFactory.create();
+    private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJava3CallAdapterFactory.create();
 
     public static void initRetrofit(String baseUrl) {
         retrofit = new Retrofit.Builder()

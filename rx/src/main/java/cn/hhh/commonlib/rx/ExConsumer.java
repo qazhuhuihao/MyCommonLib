@@ -1,7 +1,7 @@
 package cn.hhh.commonlib.rx;
 
 import cn.hhh.commonlib.utils.Logg;
-import io.reactivex.functions.Consumer;
+import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * @author hhh

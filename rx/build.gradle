@@ -24,9 +24,9 @@ android {
 dependencies {
     implementation project(':commonlib')
     //rx
-    api 'io.reactivex.rxjava2:rxjava:' + rootProject.rxjavaVersion
-    api 'io.reactivex.rxjava2:rxandroid:' + rootProject.rxandroidVersion
-    api 'com.jakewharton.rxrelay2:rxrelay:' + rootProject.rxrelayVersion
+    api 'io.reactivex.rxjava3:rxjava:' + rootProject.rxjavaVersion
+    api 'io.reactivex.rxjava3:rxandroid:' + rootProject.rxandroidVersion
+    api 'com.jakewharton.rxrelay3:rxrelay:' + rootProject.rxrelayVersion
 }
 
 //publish {
