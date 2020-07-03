@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 
-import cn.hhh.commonlib.CrashHandler;
-
 /**
  * Gson
  *
@@ -40,9 +38,8 @@ public class GsonUtil {
     public static <T> T jsonToBean(String jsonString, Type typeOfT) {
         T t = null;
         try {
-            Logg.i(typeOfT.getTypeName()+": ", jsonString);
+            Logg.i("jsonString: ", jsonString);
             t = getGson().fromJson(jsonString, typeOfT);
-
         } catch (Throwable e) {
             Logg.e("解析发生异常：" + e.getMessage());
         }

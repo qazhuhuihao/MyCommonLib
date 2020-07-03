@@ -32,7 +32,7 @@ public class MyApplication extends MyBaseApplication {
                 Logg.addLogg(loggExample);
         }
 
-        Network.initRetrofit("https://192.168.40.148:8081/");
+        Network.initRetrofit("http://192.168.40.148:8080/");
     }
 
 }

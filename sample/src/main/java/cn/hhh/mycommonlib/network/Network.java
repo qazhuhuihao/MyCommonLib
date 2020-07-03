@@ -63,20 +63,6 @@ public class Network {
         return retrofit.baseUrl().toString();
     }
 
-//    public static Retrofit changeBaseUrl(String baseUrl) {
-//        Retrofit oldRetrofit = retrofit;
-//        Logg.d(TAG, baseUrl);
-//        try {
-//            initRetrofit(baseUrl);
-//            return oldRetrofit;
-//        } catch (Exception e) {
-//            Logg.e(TAG, "", e);
-//            UIUtil.showToastShort("地址错误,请重新设置");
-//            retrofit = oldRetrofit;
-//            return null;
-//        }
-//    }
-
     /**
      * 获取权限组权限
      */
@@ -194,29 +180,6 @@ public class Network {
             }
         }
 
-//        /**
-//         * 获得信任所有服务器端证书库
-//         */
-//        static TrustManager[] getTrustAllManager() {
-//            return new X509TrustManager[]{new MyX509TrustManager()};
-//        }
-//
-//        public static class MyX509TrustManager implements X509TrustManager {
-//
-//            @Override
-//            public void checkClientTrusted(X509Certificate[] chain, String authType) {
-//            }
-//
-//            @Override
-//            public void checkServerTrusted(X509Certificate[] chain, String authType) {
-//                Logg.i(TAG, "cert: " + chain[0].toString() + ", authType: " + authType);
-//            }
-//
-//            @Override
-//            public X509Certificate[] getAcceptedIssuers() {
-//                return null;
-//            }
-//        }
     }
 
 }
