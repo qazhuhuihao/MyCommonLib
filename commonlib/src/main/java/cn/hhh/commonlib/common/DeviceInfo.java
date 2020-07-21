@@ -12,7 +12,6 @@ import android.util.DisplayMetrics;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -82,7 +81,8 @@ public final class DeviceInfo {
     /**
      * 初始化本地配置
      */
-    @SuppressWarnings("all")
+    @SuppressWarnings("unused")
+    @SuppressLint("MissingPermission")
     public static void init(Context context) {
         initDisplayMetrics(context);
         //systemLastLocale = Locale.getDefault().toString();
@@ -93,7 +93,7 @@ public final class DeviceInfo {
                 deviceIMEI = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
             }
         } catch (Exception e) {
-            Logg.e(TAG, "", e);
+            Logg.d(TAG, e);
         }
         initMacAddress(context);
         initDevicesID(context);
@@ -247,8 +247,6 @@ public final class DeviceInfo {
             if ((line = br.readLine()) != null) {
                 content = line;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

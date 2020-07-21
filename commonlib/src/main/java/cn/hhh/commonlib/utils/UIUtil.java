@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
-import androidx.core.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +20,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import cn.hhh.commonlib.MyBaseApplication;
 import cn.hhh.commonlib.R;
 
@@ -30,7 +31,7 @@ import cn.hhh.commonlib.R;
  *
  * <p>Created by lzj on 2016/1/28.<p/>
  */
-@SuppressWarnings({"unused", "UnusedReturnValue"})
+@SuppressWarnings({"unused", "UnusedReturnValue", "DanglingJavadoc"})
 public class UIUtil {
 
     private static final String TAG = UIUtil.class.getSimpleName();

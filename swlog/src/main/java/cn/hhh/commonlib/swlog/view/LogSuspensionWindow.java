@@ -132,7 +132,6 @@ public class LogSuspensionWindow {
         init();
     }
 
-    @SuppressWarnings("all")
     public void onDestroy() {
         try {
             if (null != rootView) {
@@ -152,9 +151,7 @@ public class LogSuspensionWindow {
         boolean needRepaint = false;
 
         if (myList.size() >= maxNumber) {
-            for (int i = 0; i < removeNumber; i++) {
-                myList.remove(0);
-            }
+            myList.subList(0, removeNumber).clear();
             needRepaint = true;
         }
         myList.add(myLogBean);
@@ -260,7 +257,6 @@ public class LogSuspensionWindow {
         mWindowY = 0;
     }
 
-    @SuppressWarnings("all")
     private void initClick() {
         tvTitle.setOnTouchListener(onTouchListener);
         tvZoom.setOnTouchListener(onTouchListener);
