@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.panpf.bintray-publish'
 
 //gradle.startParameter.getTaskNames().each { task ->
 //    println("task: " + task)
@@ -42,6 +43,8 @@ android {
 dependencies {
     api 'androidx.appcompat:' + rootProject.appcompat
     api 'androidx.recyclerview:' + rootProject.recyclerview
+    api 'androidx.activity:activity:' + rootProject.activityVersion
+    api 'androidx.fragment:fragment:' + rootProject.fragmentVersion
     //api 'androidx.collection:' + rootProject.collections
     api 'com.google.code.gson:gson:' + rootProject.gsonVersion
 //    compile 'com.yanzhenjie:permission:1.0.8'

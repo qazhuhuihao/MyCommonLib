@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import cn.hhh.commonlib.common.Configs;
 
@@ -30,7 +31,7 @@ import cn.hhh.commonlib.common.Configs;
  * <p><p/>
  * Created by lzj on 2015/12/31.
  */
-@SuppressWarnings({"unused", "deprecation", "ResultOfMethodCallIgnored", "JavaDoc", "UnusedReturnValue", "WeakerAccess"})
+@SuppressWarnings({"unused", "deprecation", "ResultOfMethodCallIgnored", "JavaDoc", "UnusedReturnValue", "WeakerAccess", "RedundantSuppression", "ConstantConditions"})
 public class FileStorageUtil {
     private static final String TAG = FileStorageUtil.class.getSimpleName();
 
@@ -54,7 +55,8 @@ public class FileStorageUtil {
         deleteDirsAndFile(cacheFile);
 
         File externalCacheDir = UIUtil.getContext().getExternalCacheDir();
-        deleteDirsAndFile(externalCacheDir);
+        if (null != externalCacheDir)
+            deleteDirsAndFile(externalCacheDir);
     }
 
     /**
@@ -148,7 +150,7 @@ public class FileStorageUtil {
     /**
      * 获取日志记录目录文件
      *
-     * @return File("/mnt/storage0/packagename/crashLog") if the phone has SD card,else return File("data/data/packagename/cache/crashLog")
+     * @return File("/mnt/storage0/Android/data/packagename/crashLog") if the phone has SD card,else return File("data/data/packagename/cache/crashLog")
      */
     public static File getLogDir() {
         File dir = new File(getAppRootDir(), Configs.PATH_BASE_LOG);
@@ -162,7 +164,7 @@ public class FileStorageUtil {
     /**
      * 获取日志记录目录文件
      *
-     * @return File("/mnt/storage0/packagename/.crashLog/") if the phone has SD card,else return File("data/data/packagename/cache/.crashLog/")
+     * @return File("/mnt/storage0/Android/data/packagename/.crashLog/") if the phone has SD card,else return File("data/data/packagename/cache/.crashLog/")
      */
     public static String getLogDirPath() {
         String path = getLogDir().getAbsolutePath();
@@ -176,7 +178,7 @@ public class FileStorageUtil {
     /**
      * 获取临时目录文件
      *
-     * @return File("/mnt/storage0/packagename/temp") if the phone has SD card,else return File("data/data/packagename/cache/temp")
+     * @return File("/mnt/storage0/Android/data/packagename/temp") if the phone has SD card,else return File("data/data/packagename/cache/temp")
      */
     public static File getTempDir() {
         File dir = new File(getAppRootDir(), Configs.PATH_BASE_TEMP);
@@ -190,7 +192,7 @@ public class FileStorageUtil {
     /**
      * 获取临时文件夹路径
      *
-     * @return path("/mnt/storage0/packagename/temp/") if the phone has SD card,else return path("data/data/packagename/cache/temp/")
+     * @return path("/mnt/storage0/Android/data/packagename/temp/") if the phone has SD card,else return path("data/data/packagename/cache/temp/")
      */
     public static String getTempDirPath() {
         String path = getTempDir().getAbsolutePath();
@@ -205,7 +207,7 @@ public class FileStorageUtil {
     /**
      * 获取图片目录
      *
-     * @return File("/mnt/storage0/packagename/picture") if the phone has SD card,else return File("data/data/packagename/cache/picture")
+     * @return File("/mnt/storage0/Android/data/packagename/picture") if the phone has SD card,else return File("data/data/packagename/cache/picture")
      */
     public static File getPictureDir() {
         File dir = new File(getAppRootDir(), Configs.PATH_BASE_PICTURE);
@@ -219,7 +221,7 @@ public class FileStorageUtil {
     /**
      * 获取 图片目录路径
      *
-     * @return path("/mnt/storage0/packagename/picture/") if the phone has SD card,else return path("data/data/packagename/cache/picture/")
+     * @return path("/mnt/storage0/Android/data/packagename/picture/") if the phone has SD card,else return path("data/data/packagename/cache/picture/")
      */
     public static String getPictureDirPath() {
         String path = getPictureDir().getAbsolutePath();
@@ -233,7 +235,7 @@ public class FileStorageUtil {
     /**
      * 获取图片缓存目录
      *
-     * @return File("/mnt/storage0/packagename/picture/cache/") if the phone has SD card,else return File("data/data/packagename/cache/picture/cache/")
+     * @return File("/mnt/storage0/Android/data/packagename/picture/cache/") if the phone has SD card,else return File("data/data/packagename/cache/picture/cache/")
      */
     public static File getPictureCacheDir() {
         File dir = new File(getAppRootDir(), Configs.PATH_BASE_PICTURE_CACHE);
@@ -247,7 +249,7 @@ public class FileStorageUtil {
     /**
      * 获取 图片缓存目录路径
      *
-     * @return path("/mnt/storage0/packagename/picture/cache/") if the phone has SD card,else return path("data/data/packagename/cache/picture/cache/")
+     * @return path("/mnt/storage0/Android/data/packagename/picture/cache/") if the phone has SD card,else return path("data/data/packagename/cache/picture/cache/")
      */
     public static String getPictureCacheDirPath() {
         String path = getPictureCacheDir().getAbsolutePath();
@@ -260,7 +262,7 @@ public class FileStorageUtil {
 
 
     /**
-     * 获取应用根目录下的文件(eg : "/mnt/storage0/packagename/abc.txt)
+     * 获取应用根目录下的文件(eg : "/mnt/storage0/Android/data/packagename/abc.txt)
      *
      * @param fileName 需要获取的文件名称 eg:abc.txt
      * @return 存在则返回该文件，否则返回null
@@ -276,7 +278,7 @@ public class FileStorageUtil {
     }
 
     /**
-     * 获取临时目录下的文件(eg : "/mnt/storage0/packagename/temp/abc.txt)
+     * 获取临时目录下的文件(eg : "/mnt/storage0/Android/data/packagename/temp/abc.txt)
      *
      * @param fileName 需要获取的文件名称 eg:abc.txt
      * @return 存在则返回该文件，否则返回null
@@ -292,7 +294,7 @@ public class FileStorageUtil {
     }
 
     /**
-     * 获取图片目录下的文件(eg : "/mnt/storage0/packagename/picture/abc.txt)
+     * 获取图片目录下的文件(eg : "/mnt/storage0/Android/data/packagename/picture/abc.txt)
      *
      * @param fileName 需要获取的文件名称 eg:abc.txt
      * @return 存在则返回该文件，否则返回null
@@ -317,7 +319,7 @@ public class FileStorageUtil {
      */
     public static String getFileNameOnUrl(String path) {
         int separatorIndex = path.lastIndexOf("/");
-        return (separatorIndex < 0) ? path : path.substring(separatorIndex + 1, path.length());
+        return (separatorIndex < 0) ? path : path.substring(separatorIndex + 1);
     }
 
     /**
@@ -526,7 +528,7 @@ public class FileStorageUtil {
             int len = is.available();
             byte[] buffer = new byte[len];
             is.read(buffer);
-            result = new String(buffer, "UTF-8");
+            result = new String(buffer, StandardCharsets.UTF_8);
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -548,7 +550,7 @@ public class FileStorageUtil {
             int len = inputStream.available();
             byte[] buffer = new byte[len];
             inputStream.read(buffer);
-            result = new String(buffer, "UTF-8");
+            result = new String(buffer, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
