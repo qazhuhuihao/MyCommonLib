@@ -2,24 +2,32 @@ package cn.hhh.mycommonlib;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
 import java.util.List;
+import java.util.Random;
 
 import cn.hhh.commonlib.CrashHandler;
 import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.common.DeviceInfo;
 import cn.hhh.commonlib.manager.AppManager;
 import cn.hhh.commonlib.rx.ExConsumer;
+import cn.hhh.commonlib.rx.RxBus;
 import cn.hhh.commonlib.swlog.view.LogSuspensionWindow;
 import cn.hhh.commonlib.utils.FileStorageUtil;
 import cn.hhh.commonlib.utils.Logg;
@@ -62,6 +70,24 @@ public class MainActivity extends CommonBaseActivity {
     }
 
     private void checkPermissions() {
+//        AndPermission.with(this)
+//                .runtime()
+//                .permission(Permission.WRITE_EXTERNAL_STORAGE,
+//                        Permission.READ_PHONE_STATE)
+//                .onGranted(data -> {
+//                    System.out.println("Granted");
+//                    for (String datum : data) {
+//                        System.out.println(datum);
+//                    }
+//                    next();
+//                }).onDenied(data -> {
+//            System.out.println("Denied");
+//            for (String datum : data) {
+//                System.out.println(datum);
+//            }
+//        })
+//                .start();
+
         if (AndPermission.hasPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_PHONE_STATE)) {
@@ -116,6 +142,7 @@ public class MainActivity extends CommonBaseActivity {
         Logg.d("NFC", pm.hasSystemFeature(PackageManager.FEATURE_NFC));
         Logg.d("GYROSCOPE", pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE));
 
+
     }
 
     private PermissionListener listener = new PermissionListener() {
@@ -141,10 +168,11 @@ public class MainActivity extends CommonBaseActivity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            int i = new Random().nextInt();
-//            RxBus.getDefault().post(i);
+            int i = new Random().nextInt();
+            RxBus.getDefault().post(i);
 //            startActivityForResult(new Intent(MainActivity.this, BActivity.class), 1);
-            sslTest();
+            myActivityLauncher.launch("Hello,技术最TOP");
+//            sslTest();
         }
     };
 
@@ -166,5 +194,27 @@ public class MainActivity extends CommonBaseActivity {
         XLogInit.flush();
 
         super.onDestroy();
+    }
+
+    private final ActivityResultLauncher<String> myActivityLauncher = registerForActivityResult(new MyActivityResultContract(), result -> {
+        Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
+        tv.setText("回传数据:+" + result);
+    });
+
+    static class MyActivityResultContract extends ActivityResultContract<String, String> {
+
+        @NonNull
+        @Override
+        public Intent createIntent(@NonNull Context context, String input) {
+            return new Intent(context, BActivity.class).putExtra("name", input);
+        }
+
+        @Override
+        public String parseResult(int resultCode, @Nullable Intent intent) {
+            if (resultCode == RESULT_OK && intent != null)
+                return intent.getStringExtra("result");
+            else
+                return null;
+        }
     }
 }

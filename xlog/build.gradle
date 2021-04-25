@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-//    implementation project(':commonlib')
-    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
+    implementation project(':commonlib')
+//    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
     api 'com.github.pqpo:Log4a:' + rootProject.log4aVersion
 }

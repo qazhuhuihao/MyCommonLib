@@ -1,5 +1,6 @@
 package cn.hhh.mycommonlib;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -22,6 +23,11 @@ public class BActivity extends CommonBaseActivity {
         setContentView(R.layout.activity_main);
 
         tv = findView(R.id.tv);
+
+        tv.setText(getIntent().getStringExtra("name"));
+
+        Intent intent = new Intent().putExtra("result","111");
+        setResult(RESULT_OK,intent);
 
         operateBus();
     }

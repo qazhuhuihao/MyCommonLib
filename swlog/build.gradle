@@ -22,8 +22,8 @@ android {
 }
 
 dependencies {
-//    implementation project(':commonlib')
-    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
+    implementation project(':commonlib')
+//    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
     implementation project(':rx')
     implementation 'androidx.cardview:' + rootProject.cardview
 }

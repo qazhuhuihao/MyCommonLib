@@ -22,8 +22,8 @@ android {
 }
 
 dependencies {
-//    implementation project(':commonlib')
-    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
+    implementation project(':commonlib')
+//    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
     //获取照片
     //api 'com.github.liqinew:photoframe:' + rootProject.photoframeVersion
 }

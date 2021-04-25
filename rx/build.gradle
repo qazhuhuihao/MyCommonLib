@@ -22,8 +22,8 @@ android {
 }
 
 dependencies {
-//    implementation project(':commonlib')
-    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
+    implementation project(':commonlib')
+//    api 'com.qazhuhuihao:commonlib:' + rootProject.myCommonVersion
     //rx
     api 'io.reactivex.rxjava3:rxjava:' + rootProject.rxjavaVersion
     api 'io.reactivex.rxjava3:rxandroid:' + rootProject.rxandroidVersion
