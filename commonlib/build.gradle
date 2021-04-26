@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.qazhuhuihao'
 //apply plugin: 'com.novoda.bintray-release'
-apply plugin: 'com.github.panpf.bintray-publish'
+//apply plugin: 'com.github.panpf.bintray-publish'
 
 //gradle.startParameter.getTaskNames().each { task ->
 //    println("task: " + task)
@@ -65,11 +67,17 @@ dependencies {
 //    }
 }
 
-publish {
-    userOrg = 'qazhuhuihao'//bintray.com用户名
-    groupId = 'com.qazhuhuihao'//jcenter上的路径
-    artifactId = 'commonlib'//项目名称
-    publishVersion = '0.1.2'//版本号
-    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
-    website = 'https://github.com/qazhuhuihao/MyCommonLib'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+repositories {
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
 }
+
+//publish {
+//    userOrg = 'qazhuhuihao'//bintray.com用户名
+//    groupId = 'com.qazhuhuihao'//jcenter上的路径
+//    artifactId = 'commonlib'//项目名称
+//    publishVersion = '0.1.2'//版本号
+//    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
+//    website = 'https://github.com/qazhuhuihao/MyCommonLib'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+//}
