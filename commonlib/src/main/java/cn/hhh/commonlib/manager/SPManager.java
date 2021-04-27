@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.tencent.mmkv.MMKV;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.UIUtil;
 
 /**
@@ -18,13 +21,31 @@ import cn.hhh.commonlib.utils.UIUtil;
  */
 @SuppressWarnings("unused")
 public class SPManager {
-    private static String TAG = SPManager.class.getSimpleName();
+    private static final String TAG = SPManager.class.getSimpleName();
     private final static String SP_SELF_NAME = "config";
 
-    private static SharedPreferences sp;
+    //    private static SharedPreferences sp;
+    private static MMKV sp;
+
+    private static void moveSp() {
+        // 迁移旧数据
+        {
+            SharedPreferences old_man = UIUtil.getContext().getSharedPreferences(SP_SELF_NAME, Context.MODE_PRIVATE);
+            sp.importFromSharedPreferences(old_man);
+            old_man.edit().clear().apply();
+        }
+    }
 
     private static void createSP() {
-        sp = UIUtil.getContext().getSharedPreferences(SP_SELF_NAME, Context.MODE_PRIVATE);
+        //        sp = UIUtil.getContext().getSharedPreferences(SP_SELF_NAME, Context.MODE_PRIVATE);
+        String rootDir = MMKV.initialize(UIUtil.getContext());
+        sp = MMKV.defaultMMKV();
+        if (TextUtils.isEmpty(sp.decodeString("commonVersion"))) {
+            moveSp();
+            sp.encode("commonVersion", "0.1.2");
+
+        }
+        Logg.d(TAG, "mmkv root: " + rootDir);
     }
 
     public static SharedPreferences getSP() {

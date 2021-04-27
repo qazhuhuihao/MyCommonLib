@@ -33,6 +33,7 @@ buildscript {
         leakcanaryVersion = "2.5"
         kotlin_version = '1.4.32'
         objectboxVersion = '2.9.1'
+        mmkvVersion = '1.2.7'
     }
 
     repositories {

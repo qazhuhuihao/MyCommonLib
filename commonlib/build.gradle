@@ -49,6 +49,7 @@ dependencies {
     api 'androidx.fragment:fragment:' + rootProject.fragmentVersion
     //api 'androidx.collection:' + rootProject.collections
     api 'com.google.code.gson:gson:' + rootProject.gsonVersion
+    api 'com.tencent:mmkv-static:' + rootProject.mmkvVersion
 //    compile 'com.yanzhenjie:permission:1.0.8'
 
 //    //glide
