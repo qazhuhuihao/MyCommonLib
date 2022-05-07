@@ -53,17 +53,21 @@ public class FileStorageUtil {
     public static void clearCacheDir() {
         File cacheFile = UIUtil.getContext().getCacheDir();
         deleteDirsAndFile(cacheFile);
+        Logg.d(TAG, "clearCacheDir = " + cacheFile.getAbsolutePath());
 
         File externalCacheDir = UIUtil.getContext().getExternalCacheDir();
-        if (null != externalCacheDir)
+        if (null != externalCacheDir) {
             deleteDirsAndFile(externalCacheDir);
+            Logg.d(TAG, "clearCacheDir = " + externalCacheDir.getAbsolutePath());
+        }
     }
 
     /**
      * 清除临时文件夹中的所有文件
      */
     public static void clearTempDir() {
-        File[] files = new File(getTempDirPath()).listFiles();
+        String path = getTempDirPath();
+        File[] files = new File(path).listFiles();
         if (files == null || files.length == 0) {
             return;
         }
@@ -72,6 +76,7 @@ public class FileStorageUtil {
                 file.delete();
             }
         }
+        Logg.d(TAG, "clearTempDir = " + path);
     }
 
     /**

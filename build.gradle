@@ -3,43 +3,43 @@
 buildscript {
 
     ext {
-        compileSdkVersion = 30
-        buildToolsVersion = "30.0.1"
+        compileSdkVersion = 31
+//        buildToolsVersion = "30.0.1"
         minSdkVersion = 21
-        targetSdkVersion = 30
+        targetSdkVersion = 31
         versionCode = 12
-        versionName = "0.1.2"
-        myCommonVersion = "0.1.2"
+        versionName = "0.1.3"
+        myCommonVersion = "0.1.3"
         //supportLibVersion = "28.+"
-        appcompat = "appcompat:1.2.0"
-        recyclerview = "recyclerview:1.2.0"
+        appcompat = "appcompat:1.4.0"
+        recyclerview = "recyclerview:1.2.1"
         cardview = "cardview:1.0.0"
-        activityVersion = "1.2.2"
-        fragmentVersion = "1.3.2"
+        activityVersion = "1.4.0"
+        fragmentVersion = "1.4.1"
 
-        gsonVersion = "2.8.6"
-        photoframeVersion = "v.1.0.3"
-        glideVersion = "4.12.0"
+        gsonVersion = "2.9.0"
+//        photoframeVersion = "v.1.0.3"
+        glideVersion = "4.13.2"
         transformationsVersion = "4.3.0"
         retrofitVersion = "2.9.0"
-        rxjavaVersion = "3.0.12"
+        rxjavaVersion = "3.1.4"
         rxandroidVersion = "3.0.0"
-        rxrelayVersion = "3.0.0"
+        rxrelayVersion = "3.0.1"
 //        permissionVersion = "2.0.3"
         permissionVersion = "1.1.0"
         log4aVersion = "v1.5.0"
-        okhttpVersion = "4.9.1"
-        smartrefreshVersion = "2.0.3"
-        leakcanaryVersion = "2.5"
-        kotlin_version = '1.4.32'
-        objectboxVersion = '2.9.1'
-        mmkvVersion = '1.2.7'
+        okhttpVersion = "4.9.3"
+        smartrefreshVersion = "2.0.5"
+        leakcanaryVersion = "2.9.1"
+        kotlin_version = '1.6.21'
+        objectboxVersion = '3.1.2'
+        mmkvVersion = '1.2.13'
     }
 
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         maven { url 'https://jitpack.io' }
     }
     dependencies {
@@ -55,8 +55,8 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         maven { url 'https://jitpack.io' }
     }
     tasks.withType(Javadoc).all {
