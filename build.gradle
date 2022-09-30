@@ -11,29 +11,29 @@ buildscript {
         versionName = "0.1.3"
         myCommonVersion = "0.1.3"
         //supportLibVersion = "28.+"
-        appcompat = "appcompat:1.4.0"
+        appcompat = "appcompat:1.5.1"
         recyclerview = "recyclerview:1.2.1"
         cardview = "cardview:1.0.0"
-        activityVersion = "1.4.0"
-        fragmentVersion = "1.4.1"
+        activityVersion = "1.5.1"
+        fragmentVersion = "1.5.2"
 
-        gsonVersion = "2.9.0"
+        gsonVersion = "2.9.1"
 //        photoframeVersion = "v.1.0.3"
-        glideVersion = "4.13.2"
+        glideVersion = "4.14.1"
         transformationsVersion = "4.3.0"
         retrofitVersion = "2.9.0"
-        rxjavaVersion = "3.1.4"
+        rxjavaVersion = "3.1.5"
         rxandroidVersion = "3.0.0"
         rxrelayVersion = "3.0.1"
 //        permissionVersion = "2.0.3"
         permissionVersion = "1.1.0"
         log4aVersion = "v1.5.0"
-        okhttpVersion = "4.9.3"
+        okhttpVersion = "4.10.0"
         smartrefreshVersion = "2.0.5"
         leakcanaryVersion = "2.9.1"
-        kotlin_version = '1.6.21'
-        objectboxVersion = '3.1.2'
-        mmkvVersion = '1.2.13'
+        kotlin_version = '1.7.20'
+        objectboxVersion = '3.3.1'
+        mmkvVersion = '1.2.14'
     }
 
     repositories {
