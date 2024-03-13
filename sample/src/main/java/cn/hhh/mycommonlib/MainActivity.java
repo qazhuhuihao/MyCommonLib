@@ -3,7 +3,6 @@ package cn.hhh.mycommonlib;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -16,16 +15,12 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.PermissionListener;
-
 import java.util.List;
 import java.util.Random;
 
 import cn.hhh.commonlib.CrashHandler;
 import cn.hhh.commonlib.base.CommonBaseActivity;
 import cn.hhh.commonlib.common.DeviceInfo;
-import cn.hhh.commonlib.manager.AppManager;
 import cn.hhh.commonlib.rx.ExConsumer;
 import cn.hhh.commonlib.rx.RxBus;
 import cn.hhh.commonlib.swlog.view.LogSuspensionWindow;
@@ -36,11 +31,14 @@ import cn.hhh.commonlib.xlog.XLogInit;
 import cn.hhh.mycommonlib.bean.BaseBean;
 import cn.hhh.mycommonlib.network.Network;
 import io.reactivex.rxjava3.functions.Consumer;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 /**
  * @author hhh
  */
-public class MainActivity extends CommonBaseActivity {
+public class MainActivity extends CommonBaseActivity implements EasyPermissions.PermissionCallbacks {
 
     private int i = 0;
 
@@ -88,18 +86,31 @@ public class MainActivity extends CommonBaseActivity {
 //        })
 //                .start();
 
-        if (AndPermission.hasPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_PHONE_STATE)) {
+//        if (AndPermission.hasPermission(this,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.READ_PHONE_STATE)) {
+//            next();
+//        } else {
+//            AndPermission.with(this)
+//                    .requestCode(REQUEST_CODE_SETTING)
+//                    .permission(
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                            Manifest.permission.READ_PHONE_STATE)
+//                    .callback(listener)
+//                    .start();
+//        }
+
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // Already have permission, do the thing
+            // ...
             next();
         } else {
-            AndPermission.with(this)
-                    .requestCode(REQUEST_CODE_SETTING)
-                    .permission(
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_PHONE_STATE)
-                    .callback(listener)
-                    .start();
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(new PermissionRequest.Builder(this, 1, perms)
+                    .setRationale("需要权限")
+                    .build());
+
         }
     }
 
@@ -145,25 +156,6 @@ public class MainActivity extends CommonBaseActivity {
 
     }
 
-    private PermissionListener listener = new PermissionListener() {
-        @Override
-        public void onSucceed(int i, @NonNull List<String> list) {
-
-            next();
-        }
-
-        @Override
-        public void onFailed(int i, @NonNull List<String> list) {
-            AndPermission.defaultSettingDialog(MainActivity.this, REQUEST_CODE_SETTING)
-                    .setNegativeButton("退出", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            AppManager.getAppManager().removeAll();
-                        }
-                    })
-                    .show();
-        }
-    };
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -200,6 +192,30 @@ public class MainActivity extends CommonBaseActivity {
         Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
         tv.setText("回传数据:+" + result);
     });
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int i, @NonNull List<String> list) {
+        next();
+    }
+
+    @Override
+    public void onPermissionsDenied(int i, @NonNull List<String> list) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, list)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        } else {
+            EasyPermissions.requestPermissions(new PermissionRequest.Builder(this, 1, list.toArray(new String[0]))
+                    .setRationale("需要权限")
+                    .build());
+        }
+    }
 
     static class MyActivityResultContract extends ActivityResultContract<String, String> {
 
