@@ -34,6 +34,13 @@ public class AppManager {
     }
 
     /**
+     * 获取Stack
+     */
+    public Stack<WeakReference<Activity>> getActivityStack() {
+        return activityStack;
+    }
+
+    /**
      * 将Activity压入Application栈
      *
      * @param task 将要压入栈的Activity对象
@@ -83,6 +90,16 @@ public class AppManager {
     public Activity getTopActivity() {
         if (activityStack.size() > 0) {
             return activityStack.get(activityStack.size() - 1).get();
+        }
+        return null;
+    }
+
+    /**
+     * 获取底层activity（主要用于获取MainActivity）
+     */
+    public Activity getBottomActivity() {
+        if (activityStack.size() > 0) {
+            return activityStack.get(0).get();
         }
         return null;
     }
