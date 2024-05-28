@@ -1,5 +1,7 @@
 package cn.hhh.commonlib.swlog.view;
 
+import static android.content.Context.WINDOW_SERVICE;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -22,7 +24,6 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -41,8 +42,6 @@ import cn.hhh.commonlib.utils.Logg;
 import cn.hhh.commonlib.utils.PackageManagerUtil;
 import cn.hhh.commonlib.utils.UIUtil;
 
-import static android.content.Context.WINDOW_SERVICE;
-
 /**
  * @author qazhu
  * @date 2017/12/10
@@ -58,7 +57,7 @@ public class LogSuspensionWindow {
     private WindowManager mWindowManager;
     private View rootView;
     private CardView cvRoot;
-    private LinearLayout llTitle;
+    private ViewGroup llTitle;
     private TextView tvTitle, tvZoom, tvLog;
     private HorizontalScrollView hsvLog;
     private ScrollView svLog;
@@ -100,6 +99,7 @@ public class LogSuspensionWindow {
     private ViewGroup.LayoutParams tvTitleLayoutParams;
     private ViewGroup.LayoutParams hsvLogLayoutParams;
     private ViewGroup.LayoutParams svLogLayoutParams;
+    private ViewGroup.MarginLayoutParams tvZoomLayoutParams;
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int mMinMove = 30;
@@ -224,6 +224,7 @@ public class LogSuspensionWindow {
         tvTitleLayoutParams = tvTitle.getLayoutParams();
         hsvLogLayoutParams = hsvLog.getLayoutParams();
         svLogLayoutParams = svLog.getLayoutParams();
+        tvZoomLayoutParams = (ViewGroup.MarginLayoutParams) tvZoom.getLayoutParams();
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             cvRoot.setCardElevation(0);
@@ -235,14 +236,16 @@ public class LogSuspensionWindow {
     private void setZoom(int zoomLevel) {
         this.zoomLevel = zoomLevel;
         if (0 < zoomLevel) {
-            hsvLog.setVisibility(View.VISIBLE);
+//            hsvLog.setVisibility(View.VISIBLE);
+            cvRoot.setVisibility(View.VISIBLE);
             tvZoom.setText("-");
             tvTitle.setBackground(UIUtil.getDrawable(R.drawable.corners_topleft_primary));
             tvZoom.setBackground(UIUtil.getDrawable(R.drawable.corners_topright_primarydark));
             ivZoom.setVisibility(View.VISIBLE);
             ivZoom.setImageAlpha(25);
         } else {
-            hsvLog.setVisibility(View.GONE);
+//            hsvLog.setVisibility(View.GONE);
+            cvRoot.setVisibility(View.GONE);
             tvZoom.setText("+");
             tvTitle.setBackground(UIUtil.getDrawable(R.drawable.corners_left_primary));
             tvZoom.setBackground(UIUtil.getDrawable(R.drawable.corners_right_primarydark));
@@ -294,10 +297,13 @@ public class LogSuspensionWindow {
                 int titleWidth = (int) ((1 - progress) * cTitleWidth);
 
                 int radius = UIUtil.dip2px(cRadius + (UIUtil.px2dip(cTitleHeight) / 2 - cRadius) * progress);
+
+//                int y = titleWidth * 2 < cTitleHeight ? (Math.min((cTitleHeight - titleWidth * 2), radius)) : 0;
+
                 GradientDrawable titleDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_left_primary);
                 GradientDrawable zoomDrawable = (GradientDrawable) UIUtil.getDrawable(R.drawable.corners_right_primarydark);
                 float[] radiiLeft = new float[]{radius, radius, 0, 0, 0, 0, radius, radius};
-                float[] radiiRight = new float[]{0, 0, radius, radius, radius, radius, 0, 0};
+                float[] radiiRight = new float[]{radius, radius, radius, radius, radius, radius, radius, radius};
 
                 tvTitle.getLayoutParams().height = cTitleHeight;
 
@@ -306,7 +312,11 @@ public class LogSuspensionWindow {
 
                 tvZoom.getLayoutParams().width = (int) (cZoomWidth - (cZoomWidth - cTitleHeight) * progress);
 
-                tvTitle.getLayoutParams().width = titleWidth;
+                tvZoomLayoutParams.setMargins(titleWidth, 0, 0, 0);
+
+                tvTitle.getLayoutParams().width = titleWidth + cTitleHeight / 2;
+
+//                tvTitle.getLayoutParams().height = Math.min(titleWidth * 2, cTitleHeight);
 
                 cvRoot.setRadius(radius);
                 tvTitle.requestLayout();
@@ -514,7 +524,7 @@ public class LogSuspensionWindow {
                             if (isIvZoomDown) {
                                 ivZoomLongDown = true;
                                 ivZoom.setImageAlpha(255);
-                                mStartWidth = tvTitleLayoutParams.width;
+                                mStartWidth = tvTitleLayoutParams.width - cTitleHeight / 2;
                                 mStartHeight = svLogLayoutParams.height;
                             }
                         }
@@ -545,7 +555,7 @@ public class LogSuspensionWindow {
                             cTitleWidth = baseWidth;
 
                             llTitleLayoutParams.width = baseWidth + cZoomWidth;
-                            tvTitleLayoutParams.width = baseWidth;
+                            tvTitleLayoutParams.width = baseWidth + cTitleHeight / 2;
                             hsvLogLayoutParams.width = baseWidth + cZoomWidth;
                             svLogLayoutParams.height = baseHeight;
 
@@ -553,6 +563,8 @@ public class LogSuspensionWindow {
                             tvTitle.setLayoutParams(tvTitleLayoutParams);
                             hsvLog.setLayoutParams(hsvLogLayoutParams);
                             svLog.setLayoutParams(svLogLayoutParams);
+
+                            tvZoomLayoutParams.setMargins(baseWidth, 0, 0, 0);
                         }
                     }
                     break;

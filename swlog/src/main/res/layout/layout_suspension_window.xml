@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cv_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="@dimen/suspension_window_corners"
-    app:cardElevation="@dimen/suspension_window_elevation"
-    app:cardPreventCornerOverlap="false">
+    android:animateLayoutChanges="true">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/ll_title"
         android:layout_width="@dimen/sw_width"
         android:layout_height="wrap_content"
+        android:layout_margin="2dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:translationZ="5dp">
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="@dimen/sw_title_width"
+            android:layout_width="240dp"
             android:layout_height="@dimen/sw_title_height"
             android:background="@color/titleBackground"
             android:ellipsize="end"
@@ -36,42 +33,91 @@
             android:id="@+id/tv_zoom"
             android:layout_width="@dimen/sw_zoom_width"
             android:layout_height="@dimen/sw_title_height"
+            android:layout_marginLeft="@dimen/sw_title_width"
             android:background="@color/zoomBackground"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sw_title_size"
             tools:text="+" />
-    </LinearLayout>
+    </FrameLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/hsv_log"
-        android:layout_width="@dimen/sw_width"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_root"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/sw_title_height"
-        android:background="@drawable/corners_bottom_gray"
-        android:scrollbars="none">
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="4dp"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="@dimen/suspension_window_corners"
+        app:cardElevation="@dimen/suspension_window_elevation"
+        app:cardPreventCornerOverlap="false">
 
-        <ScrollView
-            android:id="@+id/sv_log"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/sw_log_height"
+        <!--    <LinearLayout-->
+        <!--        android:id="@+id/ll_title"-->
+        <!--        android:layout_width="@dimen/sw_width"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:gravity="center_vertical"-->
+        <!--        android:translationZ="1dp"-->
+        <!--        android:orientation="horizontal">-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_title"-->
+        <!--            android:layout_width="@dimen/sw_title_width"-->
+        <!--            android:layout_height="@dimen/sw_title_height"-->
+        <!--            android:background="@color/titleBackground"-->
+        <!--            android:ellipsize="end"-->
+        <!--            android:gravity="center|start"-->
+        <!--            android:paddingLeft="@dimen/sw_title_padding"-->
+        <!--            android:paddingRight="@dimen/sw_title_padding"-->
+        <!--            android:singleLine="true"-->
+        <!--            android:text="@string/app_name"-->
+        <!--            android:textColor="@android:color/white"-->
+        <!--            android:textSize="@dimen/sw_title_size" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_zoom"-->
+        <!--            android:layout_width="@dimen/sw_zoom_width"-->
+        <!--            android:layout_height="@dimen/sw_title_height"-->
+        <!--            android:background="@color/zoomBackground"-->
+        <!--            android:gravity="center"-->
+        <!--            android:textColor="@android:color/white"-->
+        <!--            android:textSize="@dimen/sw_title_size"-->
+        <!--            tools:text="+" />-->
+        <!--    </LinearLayout>-->
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_log"
+            android:layout_width="@dimen/sw_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_bottom_gray"
+            android:paddingTop="@dimen/sw_title_height"
             android:scrollbars="none">
 
-            <TextView
-                android:id="@+id/tv_log"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical"
-                android:textColor="@android:color/black" />
+            <ScrollView
+                android:id="@+id/sv_log"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/sw_log_height"
+                android:scrollbars="none">
 
-        </ScrollView>
-    </HorizontalScrollView>
+                <TextView
+                    android:id="@+id/tv_log"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/black" />
 
-    <ImageView
-        android:id="@+id/iv_zoom"
-        android:layout_width="@dimen/iv_zoom_size"
-        android:layout_height="@dimen/iv_zoom_size"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_texture_black_48dp"
-        tools:ignore="ContentDescription" />
-</androidx.cardview.widget.CardView>
+            </ScrollView>
+        </HorizontalScrollView>
+
+        <ImageView
+            android:id="@+id/iv_zoom"
+            android:layout_width="@dimen/iv_zoom_size"
+            android:layout_height="@dimen/iv_zoom_size"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_texture_black_48dp"
+            tools:ignore="ContentDescription" />
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

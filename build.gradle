@@ -7,9 +7,9 @@ buildscript {
 //        buildToolsVersion = "30.0.1"
         minSdkVersion = 21
         targetSdkVersion = 32
-        versionCode = 15
-        versionName = "0.1.5"
-        myCommonVersion = "0.1.4"
+        versionCode = 16
+        versionName = "0.1.6"
+        myCommonVersion = "0.1.6"
         //supportLibVersion = "28.+"
         appcompat = "appcompat:1.6.1"
         recyclerview = "recyclerview:1.3.2"

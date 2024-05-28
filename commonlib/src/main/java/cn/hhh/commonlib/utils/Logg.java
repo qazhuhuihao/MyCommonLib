@@ -1,5 +1,7 @@
 package cn.hhh.commonlib.utils;
 
+import android.util.Log;
+
 import androidx.collection.ArraySet;
 
 import java.util.Set;
@@ -11,7 +13,7 @@ import cn.hhh.commonlib.common.Configs;
  * <p></p>
  * Created by lzj on 2015/12/31.
  */
-@SuppressWarnings({"unused","WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class Logg {
     private static boolean DEBUG = Configs.DEBUG;
 
@@ -149,37 +151,37 @@ public final class Logg {
         @Override
         public void v(String tag, String msg) {
             if (!DEBUG) return;
-            android.util.Log.v(tag, msg);
+            logLongMessage(Log.VERBOSE, tag, msg);
         }
 
         @Override
         public void w(String tag, String msg) {
             if (!DEBUG) return;
-            android.util.Log.w(tag, msg);
+            logLongMessage(Log.WARN, tag, msg);
         }
 
         @Override
         public void i(String tag, String msg) {
             if (!DEBUG) return;
-            android.util.Log.i(tag, msg);
+            logLongMessage(Log.INFO, tag, msg);
         }
 
         @Override
         public void d(String tag, String msg) {
             if (!DEBUG) return;
-            android.util.Log.d(tag, msg);
+            logLongMessage(Log.DEBUG, tag, msg);
         }
 
         @Override
         public void e(String tag, String msg) {
             if (!DEBUG) return;
-            android.util.Log.e(tag, msg);
+            logLongMessage(Log.ERROR, tag, msg);
         }
 
         @Override
         public void e(String tag, String msg, Throwable e) {
             if (!DEBUG) return;
-            android.util.Log.e(tag, msg, e);
+            Log.e(tag, msg, e);
         }
 
         @Override
@@ -192,6 +194,36 @@ public final class Logg {
         public void sysErr(Object msg) {
             if (!DEBUG) return;
             System.err.println(msg);
+        }
+
+        private void logLongMessage(int level, String tag, String longMsg) {
+            int maxLogSize = 3200;
+            for (int i = 0; i < longMsg.length(); i += maxLogSize) {
+                int end = Math.min(i + maxLogSize, longMsg.length());
+                switch (level) {
+                    case Log.VERBOSE:
+                        Log.v(tag, longMsg.substring(i, end));
+                        break;
+                    case Log.WARN:
+                        Log.w(tag, longMsg.substring(i, end));
+                        break;
+                    case Log.INFO:
+                        Log.i(tag, longMsg.substring(i, end));
+                        break;
+                    case Log.DEBUG:
+                        Log.d(tag, longMsg.substring(i, end));
+                        break;
+                    case Log.ERROR:
+                        Log.e(tag, longMsg.substring(i, end));
+                        break;
+                    case Log.ASSERT:
+                        Log.wtf(tag, longMsg.substring(i, end));
+                        break;
+                    default:
+                        // Handle other levels if needed
+                        break;
+                }
+            }
         }
     }
 }

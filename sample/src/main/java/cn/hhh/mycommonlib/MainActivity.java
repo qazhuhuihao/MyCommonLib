@@ -5,7 +5,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,6 +129,12 @@ public class MainActivity extends CommonBaseActivity implements EasyPermissions.
         CrashHandler.init(UIUtil.getContext());
 
         try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + UIUtil.getContext().getPackageName()));
+                    startActivity(intent);
+                }
+            }
             //打开日志悬浮窗
             LogSuspensionWindow.getInstance().onCreate();
             for (int j = 0; j < 10; j++) {
